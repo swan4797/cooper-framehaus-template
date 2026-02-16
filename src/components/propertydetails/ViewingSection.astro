@@ -1,0 +1,116 @@
+---
+// ========================================
+// VIEWING SECTION COMPONENT
+// Two-column property viewing request section
+// Used on property details pages
+// ========================================
+
+import type { Property } from '../../types/database'
+import ViewingForm from '../forms/presets/ViewingForm.astro'
+import ContactCard from '../ui/ContactCard.astro'
+import ShareCard from '../ui/ShareCard.astro'
+
+interface Props {
+  property: Property
+  phone?: string
+  email?: string
+  shareUrl?: string
+}
+
+const { property, phone, email, shareUrl } = Astro.props
+---
+
+<section class="viewing-section">
+  <div class="viewing-section__layout">
+    <!-- Left Column - Content Panel -->
+    <div class="viewing-section__panel">
+      <div class="viewing-section__content">
+        <span class="viewing-section__eyebrow">Schedule a Visit</span>
+        <h2 class="viewing-section__heading">Book Your<br />Private Viewing</h2>
+        <p class="viewing-section__intro">
+          Experience this property in person. Our team will arrange a viewing at a time that suits you.
+        </p>
+
+        <div class="viewing-section__features">
+          <div class="viewing-section__feature">
+            <div class="viewing-section__feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div class="viewing-section__feature-text">
+              <span class="viewing-section__feature-title">Flexible Scheduling</span>
+              <span class="viewing-section__feature-desc">Mornings, afternoons, or evenings</span>
+            </div>
+          </div>
+
+          <div class="viewing-section__feature">
+            <div class="viewing-section__feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+            <div class="viewing-section__feature-text">
+              <span class="viewing-section__feature-title">Quick Response</span>
+              <span class="viewing-section__feature-desc">We'll confirm within 24 hours</span>
+            </div>
+          </div>
+
+          <div class="viewing-section__feature">
+            <div class="viewing-section__feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+            <div class="viewing-section__feature-text">
+              <span class="viewing-section__feature-title">Expert Guidance</span>
+              <span class="viewing-section__feature-desc">Accompanied by our property specialists</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact & Share Cards -->
+        <div class="viewing-section__cards">
+          {(phone || email) && (
+            <div class="viewing-section__card">
+              <ContactCard
+                phone={phone}
+                email={email}
+                title="Get in Touch"
+                subtitle="Speak with our property experts"
+                emailSubject={`Enquiry about ${property.display_address}`}
+                showCard={false}
+              />
+            </div>
+          )}
+
+          {shareUrl && (
+            <div class="viewing-section__card">
+              <ShareCard
+                shareUrl={shareUrl}
+                shareText={property.display_address}
+                title="Share This Property"
+                copyButtonId="viewing-share-copy"
+                showCard={false}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column - Form -->
+    <div class="viewing-section__form-column">
+      <div class="viewing-section__form-card">
+        <ViewingForm propertyId={property.id} />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss" is:global>
+  @use '../../styles/forms/viewing-request-form';
+</style>

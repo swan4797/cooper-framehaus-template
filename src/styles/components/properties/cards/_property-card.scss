@@ -1,0 +1,451 @@
+// ========================================
+// PROPERTY CARD COMPONENT
+// Clean, modern property listing card
+// Using centralized design tokens
+// ========================================
+
+@use '../../../tokens/colors' as colors;
+@use '../../../tokens/effects' as effects;
+@use '../../../tokens/spacing' as spacing;
+@use '../../../tokens/typography' as typography;
+@use '../../../mixins' as *;
+
+// ----------------------------------------
+// CARD CONTAINER
+// ----------------------------------------
+
+.property-card {
+  position: relative;
+  background: colors.$color-bg-secondary;
+  overflow: hidden;
+  box-shadow: effects.$shadow-sm;
+  transition: box-shadow effects.$transition-base, transform effects.$transition-base;
+
+  &:hover {
+    box-shadow: effects.$shadow-lg;
+    transform: translateY(-4px);
+  }
+
+  // Featured variant
+  &.featured {
+    box-shadow: 0 4px 16px colors.$color-primary-20;
+
+    &:hover {
+      box-shadow: 0 12px 36px colors.$color-primary-30;
+    }
+  }
+}
+
+// ----------------------------------------
+// CARD LINK
+// ----------------------------------------
+
+.property-card__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+// ----------------------------------------
+// IMAGE SECTION
+// ----------------------------------------
+
+.property-card__image-container {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: colors.$color-bg-secondary;
+}
+
+// Image wrapper for slider (contains stacked images)
+.property-card__image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.property-card__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform effects.$transition-slow;
+
+  // Active image is visible
+  &--active {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  .property-card:hover & {
+    transform: scale(1.05);
+  }
+}
+
+// ----------------------------------------
+// IMAGE SLIDER NAVIGATION
+// ----------------------------------------
+
+.property-card__slider-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 15;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  .property-card:hover & {
+    opacity: 1;
+  }
+}
+
+.property-card__slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: colors.$color-bg-secondary;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 2px 8px colors.$color-black-10;
+  transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: colors.$color-bg-primary;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  &--prev {
+    left: spacing.$space-3;
+  }
+
+  &--next {
+    right: spacing.$space-3;
+  }
+
+  &--disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// ----------------------------------------
+// IMAGE COUNTER
+// ----------------------------------------
+
+.property-card__image-counter {
+  position: absolute;
+  bottom: spacing.$space-3;
+  right: spacing.$space-3;
+  padding: spacing.$space-1 spacing.$space-3;
+  background: colors.$color-bg-secondary;
+  color: colors.$color-text-light;
+  font-size: typography.$font-size-xs;
+  font-weight: typography.$font-weight-medium;
+  border-radius: 100px;
+  z-index: 15;
+  backdrop-filter: blur(4px);
+}
+
+// ----------------------------------------
+// "VIEW MORE" SLIDE
+// ----------------------------------------
+
+.property-card__more-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: colors.$color-bg-secondary;
+
+  &.property-card__image--active {
+    opacity: 1;
+  }
+}
+
+.property-card__more-slide-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.5rem;
+  gap: 0.25rem;
+}
+
+.property-card__more-slide-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: colors.$color-bg-secondary;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: colors.$color-white-85;
+  }
+}
+
+.property-card__more-slide-count {
+  font-size: 1.5rem;
+  font-weight: typography.$font-weight-bold;
+  color: colors.$color-text-light;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.property-card__more-slide-text {
+  font-size: 0.75rem;
+  font-weight: typography.$font-weight-medium;
+  color: colors.$color-white-85;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.property-card__more-slide-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: colors.$color-bg-secondary;
+  color: colors.$color-text-light;
+  font-size: 0.6875rem;
+  font-weight: typography.$font-weight-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: effects.$radius-sm;
+  transition: background-color 0.2s ease;
+
+  .property-card:hover & {
+    background: colors.$color-bg-secondary;
+  }
+}
+
+// ----------------------------------------
+// BADGES
+// ----------------------------------------
+
+.property-card__badge {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: spacing.$space-1;
+  padding: spacing.$space-2 spacing.$space-3;
+  font-size: typography.$font-size-xs;
+  font-weight: typography.$font-weight-semibold;
+  backdrop-filter: blur(8px);
+  z-index: 10;
+}
+
+.property-card__badge--featured {
+  top: spacing.$space-3;
+  left: spacing.$space-3;
+  background: colors.$color-bg-secondary;
+  color: colors.$color-bg-primary;
+  box-shadow: 0 2px 8px colors.$color-primary-30;
+
+  svg {
+    width: 12px;
+    height: 12px;
+    fill: currentColor;
+  }
+}
+
+.property-card__badge--type {
+  bottom: spacing.$space-3;
+  left: spacing.$space-3;
+  background: colors.$color-bg-secondary;
+  color: colors.$color-bg-primary;
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+// ----------------------------------------
+// FAVOURITE BUTTON
+// ----------------------------------------
+
+.property-card__favourite {
+  position: absolute;
+  top: spacing.$space-3;
+  right: spacing.$space-3;
+  z-index: 20;
+}
+
+// ----------------------------------------
+// CONTENT SECTION
+// ----------------------------------------
+
+.property-card__content {
+  display: flex;
+  flex-direction: column;
+  padding: spacing.$space-6;
+  flex: 1;
+
+  @include mobile-only {
+    padding: spacing.$space-5;
+  }
+}
+
+// ----------------------------------------
+// PRICE
+// ----------------------------------------
+
+.property-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: spacing.$space-1;
+  margin-bottom: 0.20rem;
+}
+
+.property-card__price-value {
+  font-size: 22px;
+  font-weight: typography.$font-weight-semibold;
+  color: colors.$color-text-primary;
+  line-height: 1.364em;
+}
+
+.property-card__price-suffix {
+  font-size: typography.$font-size-sm;
+  font-weight: typography.$font-weight-medium;
+  color: colors.$color-text-secondary;
+}
+
+// ----------------------------------------
+// TITLE
+// ----------------------------------------
+
+.property-card__title {
+  font-size: 18px;
+  font-weight: typography.$font-weight-semibold;
+  color: colors.$color-text-primary;
+  line-height: 1.333em;
+  margin: 0 0 spacing.$space-3 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// ----------------------------------------
+// DESCRIPTION
+// ----------------------------------------
+
+.property-card__description {
+  font-size: 13px;
+  font-weight: typography.$font-weight-regular;
+  color: colors.$color-text-muted;
+  line-height: 1.6;
+  margin: 0 0 spacing.$space-6 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+// ----------------------------------------
+// DIVIDER
+// ----------------------------------------
+
+.property-card__divider {
+  width: 100%;
+  height: 1px;
+  background: colors.$color-bg-secondary;
+  margin-bottom: spacing.$space-5;
+}
+
+// ----------------------------------------
+// SPECIFICATIONS
+// ----------------------------------------
+
+.property-card__specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: spacing.$space-3;
+}
+
+.property-card__spec {
+  display: inline-flex;
+  align-items: center;
+  gap: spacing.$space-2;
+  padding: spacing.$space-3 spacing.$space-4;
+  background: colors.$color-bg-secondary;
+  border-radius: 100px;
+}
+
+.property-card__spec-icon {
+  width: 18px;
+  height: 18px;
+  color: colors.$color-text-muted;
+  flex-shrink: 0;
+}
+
+.property-card__spec-text {
+  font-size: 0.9375rem;
+  font-weight: typography.$font-weight-medium;
+  color: colors.$color-text-secondary;
+  white-space: nowrap;
+}
+
+// ----------------------------------------
+// RESPONSIVE ADJUSTMENTS
+// ----------------------------------------
+
+@include mobile-only {
+  .property-card__price-value {
+    font-size: 20px;
+  }
+
+  .property-card__title {
+    font-size: 16px;
+  }
+
+  .property-card__description {
+    font-size: 0.9375rem;
+    margin-bottom: spacing.$space-5;
+  }
+
+  .property-card__specs {
+    gap: spacing.$space-2;
+  }
+
+  .property-card__spec {
+    padding: spacing.$space-2 spacing.$space-3;
+  }
+
+  .property-card__spec-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .property-card__spec-text {
+    font-size: 0.875rem;
+  }
+}

@@ -1,0 +1,284 @@
+// ========================================
+// INTRO SECTION STYLES
+// ========================================
+
+@use '../tokens/colors' as colors;
+@use '../tokens/effects' as effects;
+@use '../tokens/spacing' as spacing;
+@use '../tokens/typography' as typography;
+@use '../tokens/layout' as layout;
+@use '../mixins' as *;
+
+.intro-section {
+  padding: spacing.$space-16 layout.$container-padding-mobile;
+
+  @include md {
+    padding: spacing.$space-20 layout.$container-padding;
+  }
+
+  @include lg {
+    padding: spacing.$space-24 layout.$container-padding;
+  }
+
+  // ----------------------------------------
+  // PADDING VARIANTS
+  // ----------------------------------------
+
+  &--no-top-padding {
+    padding-top: 0;
+  }
+
+  &--no-bottom-padding {
+    padding-bottom: 0;
+  }
+
+  // ----------------------------------------
+  // BACKGROUND VARIANTS
+  // ----------------------------------------
+
+  &--bg-white {
+    background-color: colors.$color-bg-secondary;
+  }
+
+  &--bg-light {
+    background-color: colors.$color-bg-secondary;
+  }
+
+  &--bg-dark {
+    background-color: colors.$color-bg-secondary;
+
+    .intro-section__subtitle {
+      color: colors.$color-primary-light;
+    }
+
+    .intro-section__title {
+      color: colors.$color-text-light;
+    }
+
+    .intro-section__description {
+      color: colors.$color-white-85;
+    }
+
+    .intro-section__btn--secondary {
+      color: colors.$color-text-light;
+      border-color: colors.$color-white-35;
+
+      &:hover {
+        border-color: colors.$color-white-55;
+        background-color: colors.$color-bg-secondary;
+      }
+    }
+  }
+
+  // ----------------------------------------
+  // CONTAINER
+  // ----------------------------------------
+
+  &__container {
+    width: 100%;
+    max-width: var(--intro-max-width, 48rem);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  // ----------------------------------------
+  // ALIGNMENT VARIANTS
+  // ----------------------------------------
+
+  &--center {
+    .intro-section__container {
+      text-align: center;
+    }
+
+    .intro-section__description {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .intro-section__actions {
+      justify-content: center;
+    }
+  }
+
+  &--left {
+    .intro-section__container {
+      text-align: left;
+      max-width: 100%;
+    }
+
+    .intro-section__title,
+    .intro-section__description {
+      max-width: var(--intro-max-width, 48rem);
+    }
+
+    .intro-section__actions {
+      justify-content: flex-start;
+    }
+  }
+
+  // ----------------------------------------
+  // SUBTITLE
+  // ----------------------------------------
+
+  &__subtitle {
+    display: inline-block;
+    font-family: typography.$font-family-body;
+    font-size: typography.$font-size-sm;
+    font-weight: typography.$font-weight-semibold;
+    color: colors.$color-primary;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: spacing.$space-4;
+  }
+
+  // ----------------------------------------
+  // TITLE
+  // ----------------------------------------
+
+  &__title {
+    font-family: typography.$font-family-heading;
+    font-size: typography.$font-size-3xl;
+    font-weight: typography.$font-weight-bold;
+    color: colors.$color-text-primary;
+    line-height: typography.$line-height-tight;
+    letter-spacing: -0.02em;
+    margin: 0 0 spacing.$space-6 0;
+
+    @include md {
+      font-size: typography.$font-size-4xl;
+    }
+
+    @include lg {
+      font-size: typography.$font-size-5xl;
+    }
+  }
+
+  // ----------------------------------------
+  // DESCRIPTION
+  // ----------------------------------------
+
+  &__description {
+    font-family: typography.$font-family-body;
+    font-size: typography.$font-size-lg;
+    font-weight: typography.$font-weight-regular;
+    color: colors.$color-text-secondary;
+    line-height: typography.$line-height-relaxed;
+    max-width: 40rem;
+    margin: 0;
+
+    @include md {
+      font-size: typography.$font-size-xl;
+    }
+
+    // Handle CMS HTML content
+    :global(p) {
+      margin: 0 0 spacing.$space-4 0;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    :global(strong) {
+      color: colors.$color-text-primary;
+      font-weight: typography.$font-weight-semibold;
+    }
+
+    :global(a) {
+      color: colors.$color-primary;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: color effects.$transition-fast;
+
+      &:hover {
+        color: colors.$color-primary-dark;
+      }
+    }
+  }
+
+  // ----------------------------------------
+  // ACTIONS
+  // ----------------------------------------
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing.$space-4;
+    margin-top: spacing.$space-10;
+
+    @include mobile-only {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  // ----------------------------------------
+  // BUTTONS
+  // ----------------------------------------
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing.$space-2;
+    padding: spacing.$space-4 spacing.$space-8;
+    font-family: typography.$font-family-body;
+    font-size: typography.$font-size-base;
+    font-weight: typography.$font-weight-semibold;
+    text-decoration: none;
+    border-radius: effects.$radius-full;
+    transition:
+      background-color effects.$transition-fast,
+      border-color effects.$transition-fast,
+      transform effects.$transition-fast,
+      box-shadow effects.$transition-fast;
+    cursor: pointer;
+
+    svg {
+      width: 1.125rem;
+      height: 1.125rem;
+      transition: transform effects.$transition-fast;
+    }
+
+    &:hover svg {
+      transform: translateX(4px);
+    }
+
+    @include mobile-only {
+      width: 100%;
+      padding: spacing.$space-4 spacing.$space-6;
+    }
+
+    &--primary {
+      background-color: colors.$color-bg-secondary;
+      color: colors.$color-text-light;
+      border: none;
+
+      &:hover {
+        background-color: colors.$color-bg-secondary;
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1.5rem colors.$color-primary-50;
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    &--secondary {
+      background-color: colors.$color-bg-secondary;
+      color: colors.$color-text-primary;
+      border: 1.5px solid colors.$color-border-medium;
+
+      &:hover {
+        border-color: colors.$color-text-primary;
+        background-color: colors.$color-bg-secondary;
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+}

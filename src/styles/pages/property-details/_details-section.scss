@@ -1,0 +1,146 @@
+// ========================================
+// PROPERTY DETAILS SECTION STYLES
+// Single-column centered layout
+// Using centralized design tokens
+// ========================================
+
+@use '../../tokens/colors' as colors;
+@use '../../tokens/typography' as typography;
+@use '../../mixins' as *;
+
+.details-section {
+  max-width: 800px;
+  margin: auto;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 3rem 1.5rem;
+  }
+
+  &__header {
+    margin-bottom: 2.5rem;
+  }
+
+  &__eyebrow {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: colors.$color-accent;
+    margin-bottom: 1rem;
+    font-family: typography.$font-family-base;
+  }
+
+  &__heading {
+    font-family: typography.$font-family-heading;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: colors.$color-text-primary;
+    margin: 0 0 1.25rem 0;
+  }
+
+  &__intro {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: colors.$color-text-muted;
+    margin: 0;
+    font-family: typography.$font-family-base;
+  }
+
+  &__layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__details-column {
+    width: 100%;
+  }
+
+  &__details-card {
+    width: 100%;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 5px;
+    text-align: left;
+    background: colors.$color-bg-tertiary;
+
+    @media (max-width: 768px) {
+      padding: 1rem;
+    }
+  }
+
+  &__item-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: colors.$color-primary;
+    font-family: typography.$font-family-base;
+  }
+
+  &__item-value {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: colors.$color-text-primary;
+    font-family: typography.$font-family-base;
+  }
+
+  &__epc-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 6px;
+    font-family: typography.$font-family-base;
+  }
+
+  &__price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  &__price-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: colors.$color-text-muted;
+    font-family: typography.$font-family-base;
+  }
+
+  &__price-value {
+    font-family: typography.$font-family-heading;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 600;
+    color: colors.$color-text-primary;
+    letter-spacing: -0.02em;
+  }
+}

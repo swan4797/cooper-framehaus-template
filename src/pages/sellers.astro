@@ -1,0 +1,101 @@
+---
+// ========================================
+// SELLERS PAGE
+// Services page for property sellers
+// Dynamic content from Stratos CRM
+// ========================================
+
+import Layout from '../layouts/Layout.astro'
+import Hero from '../components/Hero.astro'
+import IntroSection from '../components/static-page/layouts/IntroSection.astro'
+import ContentBlock from '../components/static-page/layouts/ContentBlock.astro'
+import CTABanner from '../components/static-page/layouts/CTABanner.astro'
+
+// Page content utilities
+import { getPageContent, hasSection } from '../lib/pages'
+
+const pageTitle = 'Selling Your Property'
+const pageDescription = 'Expert guidance and support for selling your property. Get the best price with our experienced team.'
+
+// Fetch sellers page content from Stratos CRM
+const pageContent = await getPageContent('sellers')
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <!-- Hero Section -->
+  <Hero
+    headline="Sell Your Property With Confidence"
+    description="With expert local knowledge and a proven track record, we'll help you achieve the best possible price for your property."
+    ctaText="Get a Free Valuation"
+    ctaLink="/valuation"
+    backgroundType="image"
+    backgroundSrc="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&q=80"
+    overlayOpacity="dark"
+    showPhoneButton={false}
+    showScrollIndicator={false}
+  />
+
+  <!-- Intro Section -->
+  <IntroSection
+    title="Achieve the Best Price for Your Property"
+    subtitle="Expert Guidance"
+    description="Selling a property is one of the biggest financial decisions you'll make. That's why we take a personalised approach, combining local market expertise with modern marketing strategies to attract the right buyers."
+    ctaText="Get a free valuation"
+    ctaLink="/valuation"
+  />
+
+  <!-- Content Blocks - Alternating Layout -->
+  <ContentBlock
+    blockKey="our_approach"
+    pageContent={pageContent}
+    mediaSrc="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80"
+    mediaAlt="Our approach to selling"
+    title="Our Approach to Selling"
+    subtitle="Expert Guidance"
+    description="Selling a property is one of the biggest financial decisions you'll make. That's why we take a personalised approach, combining local market expertise with modern marketing strategies to attract the right buyers and achieve the best price."
+    ctaText="Learn more"
+    ctaLink="/contact"
+    imagePosition="left"
+    overlayStrength="light"
+  />
+
+  <ContentBlock
+    blockKey="selling_process"
+    pageContent={pageContent}
+    mediaSrc="https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1200&q=80"
+    mediaAlt="The selling process"
+    title="The Selling Process"
+    subtitle="Step by Step"
+    description="From the initial valuation to completion, we handle everything. Professional photography, premium portal listings, accompanied viewings, expert negotiation, and sales progression — all designed to get you the best result."
+    ctaText="Book a valuation"
+    ctaLink="/valuation"
+    imagePosition="right"
+    overlayStrength="light"
+    textBackground="#f9f9f9"
+  />
+
+
+<!-- CTA Banner -->
+  <CTABanner
+    title="Ready to Sell Your Property?"
+    subtitle="Book a free valuation today and discover what your property could be worth. Our team is ready to help you every step of the way."
+    primaryCtaText="Book a Valuation"
+    primaryCtaLink="/valuation"
+    secondaryCtaText="Contact Us"
+    secondaryCtaLink="/contact"
+  />
+  <ContentBlock
+    blockKey="fees"
+    pageContent={pageContent}
+    mediaSrc="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80"
+    mediaAlt="Our track record"
+    title="Our Track Record"
+    subtitle="Results That Speak"
+    description="98% asking price achieved, 6 weeks average time to offer, and over 500 properties sold. Our track record speaks for itself. We consistently deliver exceptional results for our clients."
+    ctaText="View success stories"
+    ctaLink="/about"
+    imagePosition="left"
+    overlayStrength="light"
+  />
+
+</Layout>

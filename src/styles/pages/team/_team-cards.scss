@@ -1,0 +1,285 @@
+@use '../../tokens/colors' as colors;
+
+  // ========================================
+  // DESIGN TOKENS
+  // Using centralized color tokens from tokens/_colors.scss
+  // ========================================
+
+  // Colors - Reference centralized tokens
+  $accent-color: colors.$color-primary;
+  $accent-color-light: rgba(var(--color-primary-rgb, 255, 90, 95), 0.1);
+  $text-primary: colors.$color-text-primary;
+  $text-secondary: colors.$color-text-secondary;
+  $text-muted: colors.$color-text-muted;
+  $bg-white: colors.$color-bg-primary;
+  $bg-cream: colors.$color-bg-secondary;
+  $bg-light: colors.$color-bg-tertiary;
+  $border-light: colors.$color-border-light;
+  $star-color: colors.$color-warning;
+
+  $font-serif: var(--font-family-heading, 'Fraunces', 'Georgia', serif);
+  $font-sans: var(--font-family-body, 'Figtree', 'Inter', system-ui, sans-serif);
+
+  $radius-sm: var(--radius-sm, 0.5rem);
+  $radius-md: var(--radius-md, 0.75rem);
+  $radius-lg: var(--radius-lg, 1rem);
+  $radius-xl: var(--radius-xl, 1.25rem);
+
+  $transition-fast: 150ms ease;
+  $transition-base: 250ms ease;
+
+  // ========================================
+  // CARD BASE
+  // Two-column testimonial layout
+  // ========================================
+
+  .team-card {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    background: colors.$color-bg-secondary;
+    border: 1px solid $border-light;
+    border-radius: $radius-xl;
+    overflow: hidden;
+    font-family: $font-sans;
+    transition: transform $transition-base, box-shadow $transition-base;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    // Featured variant
+    &--featured {
+      border-color: rgba(255, 90, 95, 0.2);
+
+      &:hover {
+        border-color: rgba(255, 90, 95, 0.35);
+      }
+    }
+
+    // Responsive: Stack on small screens
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // ========================================
+  // IMAGE COLUMN
+  // Portrait photo with rounded corners
+  // ========================================
+
+  .team-card__image-col {
+    position: relative;
+    min-height: 16rem;
+
+    @media (max-width: 600px) {
+      min-height: 14rem;
+    }
+  }
+
+  .team-card__image-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: colors.$color-bg-secondary;
+  }
+
+  .team-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+
+    .team-card:hover & {
+      transform: scale(1.05);
+    }
+  }
+
+  // ========================================
+  // CONTENT COLUMN
+  // Testimonial text and attribution
+  // ========================================
+
+  .team-card__content-col {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    background: colors.$color-bg-secondary;
+
+    @media (max-width: 600px) {
+      padding: 1.25rem;
+    }
+  }
+
+  // ========================================
+  // QUOTE ICON
+  // ========================================
+
+  .team-card__quote {
+    margin-bottom: 0.75rem;
+
+    svg {
+      width: 1.75rem;
+      height: 1.75rem;
+      color: $accent-color;
+      opacity: 0.6;
+    }
+  }
+
+  // ========================================
+  // HEADING (Job Title)
+  // ========================================
+
+  .team-card__heading {
+    font-family: $font-serif;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: $text-primary;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  // ========================================
+  // TESTIMONIAL TEXT (Bio)
+  // ========================================
+
+  .team-card__text {
+    font-size: 0.9375rem;
+    color: $text-secondary;
+    line-height: 1.65;
+    margin: 0;
+    flex: 1;
+
+    // Clamp to 4 lines
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  // ========================================
+  // ATTRIBUTION SECTION
+  // Avatar, rating, and name
+  // ========================================
+
+  .team-card__attribution {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .team-card__avatar {
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid $bg-white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .team-card__avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .team-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  // ========================================
+  // STAR RATING
+  // ========================================
+
+  .team-card__rating {
+    display: flex;
+    gap: 0.125rem;
+  }
+
+  .team-card__star {
+    width: 0.875rem;
+    height: 0.875rem;
+    color: $border-light;
+
+    &--filled {
+      color: $star-color;
+    }
+  }
+
+  // ========================================
+  // NAME
+  // ========================================
+
+  .team-card__name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  // ========================================
+  // CONTACT LINKS
+  // ========================================
+
+  .team-card__links {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .team-card__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: $radius-sm;
+    color: $text-muted;
+    background: colors.$color-bg-secondary;
+    transition: color $transition-fast, background $transition-fast;
+
+    &:hover {
+      color: $accent-color;
+      background: colors.$color-bg-secondary;
+    }
+
+    svg {
+      width: 0.875rem;
+      height: 0.875rem;
+    }
+  }
+
+  // ========================================
+  // ALTERNATING PATTERN SUPPORT
+  // Applied via parent grid nth-child
+  // ========================================
+
+  // Reversed layout (text-first, image-second)
+  :global(.team-card--reversed) {
+    grid-template-columns: 1.2fr 1fr;
+
+    .team-card__image-col {
+      order: 2;
+    }
+
+    .team-card__content-col {
+      order: 1;
+    }
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+
+      .team-card__image-col {
+        order: 1;
+      }
+
+      .team-card__content-col {
+        order: 2;
+      }
+    }
+  }

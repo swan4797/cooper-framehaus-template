@@ -1,0 +1,770 @@
+// ========================================
+// VIEWING REQUEST FORM STYLES
+// Two-column layout matching Map/Floorplan design
+// Premium aesthetic with refined details
+// Using centralized design tokens
+// ========================================
+
+@use '../tokens/colors' as colors;
+@use '../tokens/effects' as effects;
+@use '../tokens/spacing' as spacing;
+@use '../tokens/typography' as typography;
+@use '../mixins' as *;
+
+// Premium design tokens - reference centralized tokens
+$color-panel: colors.$color-primary;
+$color-panel-dark: colors.$color-primary-dark;
+$color-gold-accent: var(--color-accent, rgba(201, 160, 80, 1));
+$color-gold-accent-dark: var(--color-accent-dark, rgba(171, 136, 68, 1));
+
+// Typography
+$font-display: var(--font-family-heading, 'Playfair Display', Georgia, serif);
+$font-body: var(--font-family-body, 'Inter', -apple-system, sans-serif);
+
+// Local design tokens
+$shadow-card: 0 4px 24px rgba(0, 0, 0, 0.08);
+$transition-fast: 150ms ease;
+$transition-base: 200ms ease;
+
+// Local colors for form inputs - reference centralized tokens
+$bg-input: colors.$color-bg-secondary;
+$bg-input-hover: colors.$color-bg-tertiary;
+$bg-input-focus: colors.$color-bg-primary;
+
+// Section dimensions
+$section-min-height: 520px;
+$panel-overlap: 80px;
+$panel-padding: 4rem;
+
+// ========================================
+// SECTION CONTAINER - Full Width
+// ========================================
+
+.viewing-section {
+  overflow: hidden;
+}
+
+// ========================================
+// TWO-COLUMN LAYOUT
+// ========================================
+
+.viewing-section__layout {
+  display: grid;
+  grid-template-columns: 45% 55%;
+  min-height: $section-min-height;
+  position: relative;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 40% 60%;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+}
+
+// ========================================
+// LEFT COLUMN - PANEL
+// ========================================
+
+.viewing-section__panel {
+  position: relative;
+  z-index: 1;
+  background-color: colors.$color-bg-primary;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: $panel-padding;
+  padding-right: calc(#{$panel-overlap} + #{$panel-padding});
+
+  @media (max-width: 1024px) {
+    padding: 2.5rem;
+    padding-right: calc(60px + 2.5rem);
+  }
+
+  @media (max-width: 768px) {
+    order: 1;
+    padding: 3rem 1.5rem;
+    justify-content: center;
+  }
+}
+
+.viewing-section__content {
+  max-width: 380px;
+  text-align: right;
+
+  @media (max-width: 768px) {
+    text-align: center;
+    max-width: 100%;
+  }
+}
+
+// Eyebrow
+.viewing-section__eyebrow {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: typography.$font-weight-semibold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $color-gold-accent;
+  margin-bottom: 1rem;
+  font-family: $font-body;
+}
+
+// Heading
+.viewing-section__heading {
+  font-family: $font-display;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: typography.$font-weight-medium;
+  line-height: typography.$line-height-tight;
+  letter-spacing: -0.02em;
+  color: colors.$color-text-light;
+  margin: 0 0 1.5rem 0;
+}
+
+// Intro text
+.viewing-section__intro {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: colors.$color-white-65;
+  margin: 0 0 2rem 0;
+  font-family: $font-body;
+}
+
+// ========================================
+// TRUST FEATURES
+// ========================================
+
+.viewing-section__features {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.viewing-section__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  justify-content: flex-end;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    text-align: left;
+  }
+}
+
+.viewing-section__feature-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: colors.$color-bg-tertiary;
+  border-radius: 4px;
+  flex-shrink: 0;
+  order: 2;
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    stroke: colors.$color-primary;
+  }
+
+  @media (max-width: 768px) {
+    order: 0;
+  }
+}
+
+.viewing-section__feature-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  order: 1;
+
+  @media (max-width: 768px) {
+    order: 1;
+  }
+}
+
+.viewing-section__feature-title {
+  font-size: 0.9375rem;
+  font-weight: typography.$font-weight-semibold;
+  color: colors.$color-text-light;
+  font-family: $font-body;
+}
+
+.viewing-section__feature-desc {
+  font-size: 0.8125rem;
+  color: colors.$color-white-60;
+  font-family: $font-body;
+}
+
+// ========================================
+// CONTACT & SHARE CARDS
+// ========================================
+
+.viewing-section__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid colors.$color-white-15;
+}
+
+.viewing-section__card {
+  text-align: center;
+
+  // Override standalone card styles for dark background
+  :global(.contact-card-standalone__title),
+  :global(.share-buttons-standalone__title) {
+    color: colors.$color-text-light;
+    font-size: 1rem;
+  }
+
+  :global(.contact-card-standalone__subtitle) {
+    color: colors.$color-white-65;
+  }
+
+  :global(.contact-card-standalone__actions) {
+    justify-content: flex-end;
+
+    @media (max-width: 768px) {
+      justify-content: center;
+    }
+  }
+
+  // Style buttons for dark background
+  :global(.btn) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: typography.$font-weight-semibold;
+    text-decoration: none;
+    border-radius: 0;
+    transition: all $transition-fast;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  :global(.btn--primary) {
+    background: colors.$color-bg-secondary;
+    color: colors.$color-text-primary;
+
+    &:hover {
+      background: colors.$color-bg-secondary;
+    }
+  }
+
+  :global(.btn--secondary) {
+    background: colors.$color-bg-secondary;
+    color: colors.$color-text-light;
+    border: 1px solid colors.$color-white-20;
+
+    &:hover {
+      background: colors.$color-bg-secondary;
+      border-color: colors.$color-white-30;
+    }
+  }
+
+  // Style share buttons for dark background
+  :global(.share-buttons) {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+
+    @media (max-width: 768px) {
+      justify-content: center;
+    }
+  }
+
+  :global(.share-btn) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: colors.$color-bg-secondary;
+    border: 1px solid colors.$color-white-15;
+    border-radius: 0;
+    color: colors.$color-text-light;
+    cursor: pointer;
+    transition: all $transition-fast;
+    position: relative;
+
+    svg {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+
+    &:hover {
+      background: colors.$color-bg-secondary;
+      border-color: colors.$color-white-25;
+      transform: translateY(-2px);
+    }
+  }
+
+  :global(.share-btn__tooltip) {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    background: colors.$color-bg-secondary;
+    color: colors.$color-text-primary;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: typography.$font-weight-semibold;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all $transition-fast;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-top-color: colors.$color-text-light;
+    }
+  }
+
+  :global(.share-btn.copied .share-btn__tooltip) {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// ========================================
+// RIGHT COLUMN - FORM
+// ========================================
+
+.viewing-section__form-column {
+  position: relative;
+  z-index: 2;
+  margin-left: -$panel-overlap;
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+
+  @media (max-width: 1024px) {
+    margin-left: -60px;
+    padding: 1.5rem 1.5rem 1.5rem 0;
+  }
+
+  @media (max-width: 768px) {
+    order: 2;
+    margin-left: 0;
+    padding: 0 1.5rem 2rem;
+  }
+}
+
+// ========================================
+// FORM CONTAINER
+// ========================================
+
+.viewing-form {
+  width: 100%;
+  font-family: typography.$font-family-base;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
+}
+
+.viewing-section__form-card {
+  background: colors.$color-bg-secondary;
+  border-radius: 0;
+  box-shadow: -8px 0 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  padding: 2rem;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    box-shadow: $shadow-card;
+    padding: 1.5rem;
+  }
+}
+
+// ========================================
+// FORM BODY
+// ========================================
+
+.viewing-form__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 2rem;
+
+  @media (max-width: 480px) {
+    padding: 1.5rem;
+  }
+}
+
+// ========================================
+// FORM FIELDS
+// ========================================
+
+.viewing-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.viewing-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+.viewing-form__label {
+  font-size: 0.75rem;
+  font-weight: typography.$font-weight-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: colors.$color-text-secondary;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.viewing-form__required {
+  color: $color-gold-accent;
+  font-weight: typography.$font-weight-semibold;
+}
+
+// ========================================
+// INPUTS - Clean, Refined Style
+// ========================================
+
+.viewing-form__input,
+.viewing-form__textarea {
+  width: 100%;
+  height: 3rem;
+  padding: 0 1rem;
+  font-family: typography.$font-family-base;
+  font-size: 0.9375rem;
+  color: colors.$color-text-primary;
+  // background: colors.$color-bg-secondary;
+  border: 1px solid transparent;
+  border-radius: 0;
+  transition:
+    background $transition-fast,
+    border-color $transition-fast,
+    box-shadow $transition-fast;
+
+  &::placeholder {
+    color: colors.$color-text-muted;
+    opacity: 0.7;
+  }
+
+  &:hover:not(:focus) {
+    background: colors.$color-bg-secondary;
+  }
+
+  &:focus {
+    outline: none;
+    background: colors.$color-bg-secondary;
+    border-color: $color-panel;
+    box-shadow: 0 0 0 3px colors.$color-primary-12;
+  }
+}
+
+.viewing-form__textarea {
+  height: auto;
+  min-height: 5rem;
+  padding: 0.875rem 1rem;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+// ========================================
+// DATE PICKER (Flatpickr)
+// ========================================
+
+.viewing-form__date-wrapper {
+  position: relative;
+}
+
+.viewing-form__date-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.125rem;
+  height: 1.125rem;
+  color: colors.$color-text-muted;
+  pointer-events: none;
+}
+
+.viewing-form__input--date {
+  cursor: pointer;
+  padding-right: 2.75rem;
+}
+
+// ========================================
+// TIME PICKER - Compact Selection Cards
+// ========================================
+
+.viewing-form__time-picker {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.viewing-form__time-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  height: 3.5rem;
+  padding: 0.5rem;
+  background: colors.$color-bg-secondary;
+  border: 1px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  transition:
+    background $transition-fast,
+    border-color $transition-fast,
+    box-shadow $transition-fast;
+  font-family: typography.$font-family-base;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    color: colors.$color-text-muted;
+    transition: color $transition-fast;
+  }
+
+  &:hover:not(.is-selected) {
+    background: colors.$color-bg-secondary;
+
+    svg {
+      color: colors.$color-text-secondary;
+    }
+  }
+
+  &:focus {
+    outline: none;
+    background: colors.$color-bg-secondary;
+    border-color: $color-panel;
+    box-shadow: 0 0 0 3px colors.$color-primary-12;
+  }
+
+  &.is-selected {
+    background: colors.$color-bg-secondary;
+    border-color: $color-panel;
+    box-shadow: 0 0 0 2px colors.$color-primary-15;
+
+    svg {
+      color: $color-panel;
+    }
+
+    .viewing-form__time-label {
+      color: $color-panel;
+      font-weight: typography.$font-weight-semibold;
+    }
+
+    .viewing-form__time-range {
+      color: $color-panel;
+      opacity: 0.75;
+    }
+  }
+}
+
+.viewing-form__time-label {
+  font-size: 0.75rem;
+  font-weight: typography.$font-weight-medium;
+  color: colors.$color-text-primary;
+  line-height: 1.2;
+}
+
+.viewing-form__time-range {
+  font-size: 0.625rem;
+  color: colors.$color-text-muted;
+  line-height: 1;
+}
+
+// ========================================
+// CHECKBOX - Refined Style
+// ========================================
+
+.viewing-form__checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding-top: 0.25rem;
+}
+
+.viewing-form__checkbox-input {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: $color-panel;
+  border-radius: 0;
+
+  &:focus {
+    outline: 2px solid $color-panel;
+    outline-offset: 2px;
+  }
+}
+
+.viewing-form__checkbox-label {
+  font-size: 0.8125rem;
+  color: colors.$color-text-secondary;
+  line-height: 1.5;
+  cursor: pointer;
+  user-select: none;
+}
+
+// ========================================
+// SUBMIT BUTTON - Premium Gold Accent
+// ========================================
+
+.viewing-form__submit {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 3.25rem;
+  padding: 0 1.5rem;
+  margin-top: 0.25rem;
+  background: colors.$color-bg-secondary;
+  color: colors.$color-text-primary;
+  border: none;
+  border-radius: 0;
+  font-family: typography.$font-family-base;
+  font-size: 0.875rem;
+  font-weight: typography.$font-weight-semibold;
+  letter-spacing: 0.025em;
+  cursor: pointer;
+  transition:
+    background $transition-fast,
+    transform $transition-fast,
+    box-shadow $transition-fast;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &:hover:not(:disabled) {
+    background: colors.$color-bg-secondary;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(201, 160, 80, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-gold-accent;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// ========================================
+// PRIVACY NOTICE
+// ========================================
+
+.viewing-form__privacy {
+  font-size: 0.75rem;
+  color: colors.$color-text-muted;
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+
+  a {
+    color: colors.$color-text-secondary;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-panel;
+    }
+  }
+}
+
+// ========================================
+// STATUS MESSAGES
+// ========================================
+
+.viewing-form__message {
+  display: none;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  margin: 0;
+  border-radius: 0;
+
+  &.show {
+    display: flex;
+  }
+}
+
+.viewing-form__message-icon {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.viewing-form__message-content {
+  flex: 1;
+}
+
+.viewing-form__message-title {
+  font-size: 1rem;
+  font-weight: typography.$font-weight-semibold;
+  margin: 0 0 0.375rem 0;
+}
+
+.viewing-form__message-text {
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.viewing-form__message--success {
+  background: colors.$color-bg-secondary;
+  border: 1px solid colors.$color-success-border;
+  color: colors.$color-success-dark;
+}
+
+.viewing-form__message--error {
+  background: colors.$color-bg-secondary;
+  border: 1px solid colors.$color-error-border;
+  color: colors.$color-error-dark;
+}

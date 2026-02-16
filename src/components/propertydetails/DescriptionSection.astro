@@ -1,0 +1,61 @@
+---
+// ========================================
+// DESCRIPTION SECTION COMPONENT
+// Single-column centered layout
+// Styles in: src/styles/pages/property-details/_description-section.scss
+// ========================================
+
+interface Props {
+  description?: string
+}
+
+const { description } = Astro.props
+
+// Decode HTML entities
+const decodeHtmlEntities = (text: string): string => {
+  const entities: Record<string, string> = {
+    '&lt;': '<',
+    '&gt;': '>',
+    '&amp;': '&',
+    '&quot;': '"',
+    '&#39;': "'",
+    '&nbsp;': ' ',
+  }
+  return text.replace(/&lt;|&gt;|&amp;|&quot;|&#39;|&nbsp;/g, (match) => entities[match] || match)
+}
+
+// Clean up HTML description text
+const cleanDescription = (html: string): string => {
+  let decoded = decodeHtmlEntities(html)
+  return decoded
+    .replace(/<br\s*\/?>/gi, '<br />')
+    .replace(/(<br\s*\/?>\s*){2,}/gi, '</p><p>')
+    .trim()
+}
+
+const cleanedDescription = description ? cleanDescription(description) : null
+---
+
+{cleanedDescription && (
+  <section class="description-section">
+    <!-- Section Header -->
+    <div class="description-section__header">
+      <span class="description-section__eyebrow">Property Overview</span>
+      <h2 class="description-section__heading">
+        About This Property
+      </h2>
+      <p class="description-section__intro">
+        Discover what makes this property unique and explore its distinctive features.
+      </p>
+    </div>
+
+    <!-- Description Content -->
+    <div class="description-section__layout">
+      <div class="description-section__description-column">
+        <div class="description-section__description-card">
+          <div class="description-section__description-text" set:html={cleanedDescription} />
+        </div>
+      </div>
+    </div>
+  </section>
+)}

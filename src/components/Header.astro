@@ -1,0 +1,661 @@
+---
+// ========================================
+// HEADER COMPONENT
+// Modular, configurable navigation header
+// Supports multiple variants for different page contexts
+// ========================================
+
+import { siteConfig } from '../lib/config'
+import { fetchBrandSettings } from '../lib/brand'
+import type { BrandSettings } from '../types/brand'
+
+// ========================================
+// TYPE DEFINITIONS
+// ========================================
+
+/** Available header visual variants */
+export type HeaderVariant = 'transparent' | 'solid' | 'dark' | 'minimal'
+
+/** Navigation dropdown item */
+export interface NavDropdownItem {
+  label: string
+  href: string
+  description?: string
+  icon?: string
+}
+
+/** Navigation item (with optional dropdown) */
+export interface NavItem {
+  label: string
+  href: string
+  dropdown?: NavDropdownItem[]
+  highlight?: boolean
+}
+
+/** Header visual configuration per variant */
+export interface HeaderVariantConfig {
+  /** Background color */
+  background?: string
+  /** Text color */
+  textColor?: string
+  /** Text hover color */
+  textHover?: string
+  /** Border color */
+  borderColor?: string
+  /** Use light logo (for dark backgrounds) */
+  lightLogo?: boolean
+  /** Background when scrolled */
+  scrolledBackground?: string
+  /** Add blur effect when scrolled */
+  scrolledBlur?: boolean
+}
+
+/** Complete header configuration */
+export interface HeaderConfig {
+  /** Visual variant preset */
+  variant?: HeaderVariant
+  /** Custom variant overrides */
+  variantConfig?: HeaderVariantConfig
+  /** Show/hide the CTA button */
+  showCta?: boolean
+  /** CTA button text */
+  ctaText?: string
+  /** CTA button link */
+  ctaHref?: string
+  /** Show/hide the search button */
+  showSearch?: boolean
+  /** Custom navigation items (overrides defaults) */
+  navItems?: NavItem[]
+  /** Enable scroll hide/show behavior */
+  enableScrollBehavior?: boolean
+  /** Enable scroll appearance change */
+  enableScrollAppearance?: boolean
+  /** Sticky header */
+  sticky?: boolean
+}
+
+/** Header component props - supports both simple and advanced usage */
+export interface Props extends HeaderConfig {
+  /** @deprecated Use config.variantConfig.background instead */
+  backgroundColor?: string
+  /** @deprecated Use config.variantConfig.lightLogo instead */
+  forceLightLogo?: boolean
+}
+
+// ========================================
+// VARIANT PRESETS
+// Predefined configurations for common use cases
+// ========================================
+
+const variantPresets: Record<HeaderVariant, HeaderVariantConfig> = {
+  transparent: {
+    background: 'transparent',
+    textColor: 'var(--color-text-light-90)',
+    textHover: 'var(--color-accent)',
+    borderColor: 'transparent',
+    lightLogo: true,
+    scrolledBackground: 'var(--color-bg-primary-98)',
+    scrolledBlur: true,
+  },
+  solid: {
+    background: 'var(--color-bg-primary)',
+    textColor: 'var(--color-text-primary)',
+    textHover: 'var(--color-accent)',
+    borderColor: 'var(--color-border-light)',
+    lightLogo: false,
+    scrolledBackground: 'var(--color-bg-primary)',
+    scrolledBlur: false,
+  },
+  dark: {
+    background: 'var(--color-bg-dark)',
+    textColor: 'var(--color-text-light-90)',
+    textHover: 'var(--color-text-light)',
+    borderColor: 'var(--color-border-dark)',
+    lightLogo: true,
+    scrolledBackground: 'var(--color-bg-dark-95)',
+    scrolledBlur: true,
+  },
+  minimal: {
+    background: 'transparent',
+    textColor: 'var(--color-text-primary)',
+    textHover: 'var(--color-primary)',
+    borderColor: 'transparent',
+    lightLogo: false,
+    scrolledBackground: 'var(--color-bg-primary)',
+    scrolledBlur: false,
+  },
+}
+
+// ========================================
+// DEFAULT NAVIGATION
+// ========================================
+
+const defaultNavItems: NavItem[] = [
+  { label: 'For Sale', href: '/search?listing_type=sale' },
+  { label: 'To Rent', href: '/search?listing_type=let' },
+  {
+    label: 'Services',
+    href: '#',
+    dropdown: [
+      { label: 'Sellers', href: '/sellers', description: 'Sell your property' },
+      { label: 'Buyers', href: '/buyers', description: 'Find your perfect home' },
+      { label: 'Landlords', href: '/landlords', description: 'Letting & management' },
+      { label: 'Tenants', href: '/tenants', description: 'Rental properties' },
+    ]
+  },
+  {
+    label: 'About',
+    href: '/about',
+    dropdown: [
+      { label: 'About Us', href: '/about', description: 'Learn more about us' },
+      { label: 'Our Team', href: '/team', description: 'Meet the team' },
+      { label: 'Blog', href: '/blog', description: 'News & insights' },
+    ]
+  },
+  { label: 'Branch', href: '/branches' },
+  { label: 'Areas', href: '/areas' },
+  { label: 'Contact', href: '/contact' },
+]
+
+// ========================================
+// PROPS DESTRUCTURING WITH DEFAULTS
+// ========================================
+
+const {
+  // Core variant
+  variant = 'transparent',
+  variantConfig,
+
+  // CTA configuration
+  showCta = true,
+  ctaText = 'Get a Valuation',
+  ctaHref = '/valuation',
+
+  // Search configuration
+  showSearch = true,
+
+  // Navigation
+  navItems = defaultNavItems,
+
+  // Behavior
+  enableScrollBehavior = true,
+  enableScrollAppearance = true,
+  sticky = true,
+
+  // Deprecated props (backward compatibility)
+  backgroundColor,
+  forceLightLogo,
+} = Astro.props
+
+// ========================================
+// COMPUTED VARIANT CONFIG
+// Merge preset with custom overrides
+// ========================================
+
+const basePreset = variantPresets[variant] || variantPresets.transparent
+
+// Handle deprecated props
+const deprecatedOverrides: Partial<HeaderVariantConfig> = {}
+if (backgroundColor) {
+  deprecatedOverrides.background = backgroundColor
+}
+if (forceLightLogo !== undefined) {
+  deprecatedOverrides.lightLogo = forceLightLogo
+}
+
+// Final merged configuration
+const finalVariantConfig: HeaderVariantConfig = {
+  ...basePreset,
+  ...deprecatedOverrides,
+  ...variantConfig,
+}
+
+// ========================================
+// BRAND SETTINGS
+// ========================================
+
+let brand: BrandSettings
+try {
+  brand = await fetchBrandSettings()
+} catch (error) {
+  console.error('[Header] Error fetching brand settings:', error)
+  brand = await fetchBrandSettings()
+}
+
+const businessName = brand.business_name || siteConfig.name
+
+const hasValidLogo = brand.logo_main_url &&
+  brand.logo_main_url.trim() !== '' &&
+  !brand.logo_main_url.startsWith('blob:')
+
+// ========================================
+// COMPUTED VALUES
+// ========================================
+
+// Build header classes
+const headerClasses = [
+  'site-header',
+  `site-header--${variant}`,
+  finalVariantConfig.lightLogo ? 'site-header--light-logo' : '',
+  sticky ? 'site-header--sticky' : '',
+  enableScrollAppearance ? 'site-header--scroll-appearance' : '',
+].filter(Boolean).join(' ')
+
+// Custom CSS properties for variant
+const headerStyles = [
+  `--header-bg: ${finalVariantConfig.background}`,
+  `--header-text-color: ${finalVariantConfig.textColor}`,
+  `--header-text-hover: ${finalVariantConfig.textHover}`,
+  `--header-border: ${finalVariantConfig.borderColor}`,
+  `--header-scrolled-bg: ${finalVariantConfig.scrolledBackground}`,
+].filter(Boolean).join('; ')
+
+// Data attributes for JavaScript
+const headerData = {
+  'data-variant': variant,
+  'data-scroll-behavior': enableScrollBehavior.toString(),
+  'data-scroll-appearance': enableScrollAppearance.toString(),
+  'data-scrolled-blur': finalVariantConfig.scrolledBlur?.toString() || 'false',
+}
+---
+
+<header
+  class={headerClasses}
+  id="site-header"
+  style={headerStyles}
+  {...headerData}
+>
+  <div class="header__container">
+    <!-- Logo -->
+    <a href="/" class="header__logo" aria-label={`${businessName} - Home`}>
+      {hasValidLogo ? (
+        <img
+          src={brand.logo_main_url}
+          alt={businessName}
+          class="header__logo-img"
+          width="140"
+          height="50"
+        />
+      ) : (
+        <>
+          <svg class="header__logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M20 4L4 16V36H16V24H24V36H36V16L20 4Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M20 4L4 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M20 4L36 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="header__logo-text">{businessName}</span>
+        </>
+      )}
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav class="header__nav" aria-label="Main navigation">
+      <ul class="header__nav-list" role="menubar">
+        {navItems.map((item) => (
+          <li
+            class={`header__nav-item ${item.dropdown ? 'header__nav-item--has-dropdown' : ''} ${item.highlight ? 'header__nav-item--highlight' : ''}`}
+            role="none"
+          >
+            {item.dropdown ? (
+              <>
+                <button
+                  type="button"
+                  class="header__nav-link header__nav-link--dropdown"
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  role="menuitem"
+                >
+                  {item.label}
+                  <svg class="header__dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <div class="header__dropdown" role="menu">
+                  <div class="header__dropdown-content">
+                    {item.dropdown.map((subItem) => (
+                      <a href={subItem.href} class="header__dropdown-link" role="menuitem">
+                        <span class="header__dropdown-label">{subItem.label}</span>
+                        {subItem.description && (
+                          <span class="header__dropdown-desc">{subItem.description}</span>
+                        )}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <a href={item.href} class={`header__nav-link ${item.highlight ? 'header__nav-link--highlight' : ''}`} role="menuitem">
+                {item.label}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Right Actions -->
+    <div class="header__actions">
+      {showSearch && (
+        <a
+          href="/search"
+          class="header__search-btn"
+          aria-label="Search properties"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+          </svg>
+        </a>
+      )}
+
+      {showCta && (
+        <a href={ctaHref} class="header__cta">
+          {ctaText}
+        </a>
+      )}
+
+      <!-- Mobile Menu Toggle -->
+      <button
+        type="button"
+        class="header__mobile-toggle"
+        id="mobile-menu-toggle"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Open menu"
+      >
+        <span class="header__hamburger" aria-hidden="true">
+          <span class="header__hamburger-line"></span>
+          <span class="header__hamburger-line"></span>
+          <span class="header__hamburger-line"></span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="header__mobile-menu" id="mobile-menu" aria-hidden="true">
+    <nav class="header__mobile-nav" aria-label="Mobile navigation">
+      <ul class="header__mobile-list">
+        {navItems.map((item) => (
+          <li class={`header__mobile-item ${item.dropdown ? 'header__mobile-item--has-dropdown' : ''}`}>
+            {item.dropdown ? (
+              <>
+                <button
+                  type="button"
+                  class="header__mobile-link header__mobile-link--dropdown"
+                  aria-expanded="false"
+                >
+                  {item.label}
+                  <svg class="header__mobile-dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <ul class="header__mobile-dropdown">
+                  {item.dropdown.map((subItem) => (
+                    <li>
+                      <a href={subItem.href} class="header__mobile-dropdown-link">
+                        {subItem.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <a href={item.href} class="header__mobile-link">
+                {item.label}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      {showCta && (
+        <a href={ctaHref} class="header__mobile-cta">
+          {ctaText}
+        </a>
+      )}
+    </nav>
+  </div>
+</header>
+
+<style lang="scss">
+  @use '../styles/components/header';
+</style>
+
+<script>
+  // ========================================
+  // HEADER CONTROLLER
+  // Handles mobile menu, dropdowns, and scroll behavior
+  // ========================================
+
+  class HeaderController {
+    private header: HTMLElement | null
+    private mobileToggle: HTMLElement | null
+    private mobileMenu: HTMLElement | null
+    private lastScrollY: number = 0
+    private ticking: boolean = false
+    private scrollThreshold: number = 10
+    private topThreshold: number = 100
+
+    constructor() {
+      this.header = document.getElementById('site-header')
+      this.mobileToggle = document.getElementById('mobile-menu-toggle')
+      this.mobileMenu = document.getElementById('mobile-menu')
+
+      this.init()
+    }
+
+    private init(): void {
+      this.setupMobileMenu()
+      this.setupMobileDropdowns()
+      this.setupDesktopDropdowns()
+      this.setupKeyboardNavigation()
+
+      // Check if scroll behavior is enabled
+      const enableScrollBehavior = this.header?.dataset.scrollBehavior === 'true'
+      const enableScrollAppearance = this.header?.dataset.scrollAppearance === 'true'
+
+      if (enableScrollBehavior || enableScrollAppearance) {
+        this.setupScrollBehavior()
+      }
+    }
+
+    // ========================================
+    // MOBILE MENU
+    // ========================================
+
+    private setupMobileMenu(): void {
+      this.mobileToggle?.addEventListener('click', () => this.toggleMobileMenu())
+
+      // Close on link click
+      this.mobileMenu?.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => this.closeMobileMenu())
+      })
+    }
+
+    private toggleMobileMenu(): void {
+      const isOpen = this.header?.classList.contains('is-menu-open')
+
+      if (isOpen) {
+        this.closeMobileMenu()
+      } else {
+        this.openMobileMenu()
+      }
+    }
+
+    private openMobileMenu(): void {
+      this.header?.classList.add('is-menu-open')
+      this.mobileToggle?.setAttribute('aria-expanded', 'true')
+      this.mobileToggle?.setAttribute('aria-label', 'Close menu')
+      this.mobileMenu?.setAttribute('aria-hidden', 'false')
+      document.body.style.overflow = 'hidden'
+    }
+
+    private closeMobileMenu(): void {
+      this.header?.classList.remove('is-menu-open')
+      this.mobileToggle?.setAttribute('aria-expanded', 'false')
+      this.mobileToggle?.setAttribute('aria-label', 'Open menu')
+      this.mobileMenu?.setAttribute('aria-hidden', 'true')
+      document.body.style.overflow = ''
+    }
+
+    // ========================================
+    // DESKTOP DROPDOWNS
+    // ========================================
+
+    private setupDesktopDropdowns(): void {
+      const dropdownItems = document.querySelectorAll('.header__nav-item--has-dropdown')
+
+      dropdownItems.forEach(item => {
+        const button = item.querySelector('.header__nav-link--dropdown')
+
+        // Toggle on click for accessibility
+        button?.addEventListener('click', (e) => {
+          e.preventDefault()
+          const isExpanded = button.getAttribute('aria-expanded') === 'true'
+
+          // Close all other dropdowns
+          dropdownItems.forEach(otherItem => {
+            const otherButton = otherItem.querySelector('.header__nav-link--dropdown')
+            otherButton?.setAttribute('aria-expanded', 'false')
+          })
+
+          // Toggle current
+          button.setAttribute('aria-expanded', isExpanded ? 'false' : 'true')
+        })
+      })
+
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement
+        if (!target.closest('.header__nav-item--has-dropdown')) {
+          dropdownItems.forEach(item => {
+            const button = item.querySelector('.header__nav-link--dropdown')
+            button?.setAttribute('aria-expanded', 'false')
+          })
+        }
+      })
+    }
+
+    // ========================================
+    // MOBILE DROPDOWNS
+    // ========================================
+
+    private setupMobileDropdowns(): void {
+      const dropdownToggles = this.mobileMenu?.querySelectorAll('.header__mobile-link--dropdown')
+
+      dropdownToggles?.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+          const parent = toggle.closest('.header__mobile-item--has-dropdown')
+          const isOpen = parent?.classList.contains('is-open')
+
+          // Close all other dropdowns
+          this.mobileMenu?.querySelectorAll('.header__mobile-item--has-dropdown').forEach(item => {
+            item.classList.remove('is-open')
+            item.querySelector('.header__mobile-link--dropdown')?.setAttribute('aria-expanded', 'false')
+          })
+
+          // Toggle current dropdown
+          if (!isOpen) {
+            parent?.classList.add('is-open')
+            toggle.setAttribute('aria-expanded', 'true')
+          }
+        })
+      })
+    }
+
+    // ========================================
+    // KEYBOARD NAVIGATION
+    // ========================================
+
+    private setupKeyboardNavigation(): void {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          // Close mobile menu
+          if (this.header?.classList.contains('is-menu-open')) {
+            this.closeMobileMenu()
+          }
+
+          // Close desktop dropdowns
+          document.querySelectorAll('.header__nav-link--dropdown').forEach(button => {
+            button.setAttribute('aria-expanded', 'false')
+          })
+        }
+      })
+    }
+
+    // ========================================
+    // SCROLL BEHAVIOR
+    // ========================================
+
+    private setupScrollBehavior(): void {
+      window.addEventListener('scroll', () => this.onScroll(), { passive: true })
+      this.updateHeaderOnScroll()
+    }
+
+    private onScroll(): void {
+      if (!this.ticking) {
+        requestAnimationFrame(() => this.updateHeaderOnScroll())
+        this.ticking = true
+      }
+    }
+
+    private updateHeaderOnScroll(): void {
+      const currentScrollY = window.scrollY
+      const scrollDelta = currentScrollY - this.lastScrollY
+      const isMenuOpen = this.header?.classList.contains('is-menu-open')
+      const enableScrollBehavior = this.header?.dataset.scrollBehavior === 'true'
+      const enableScrollAppearance = this.header?.dataset.scrollAppearance === 'true'
+
+      // Don't hide if mobile menu is open
+      if (isMenuOpen) {
+        this.ticking = false
+        return
+      }
+
+      // Handle scroll appearance (background change)
+      if (enableScrollAppearance) {
+        if (currentScrollY > 10) {
+          this.header?.classList.add('is-scrolled')
+        } else {
+          this.header?.classList.remove('is-scrolled')
+        }
+      }
+
+      // Handle scroll behavior (hide/show)
+      if (enableScrollBehavior) {
+        // Always show header when near top
+        if (currentScrollY < this.topThreshold) {
+          this.header?.classList.remove('is-hidden')
+          this.lastScrollY = currentScrollY
+          this.ticking = false
+          return
+        }
+
+        // Only trigger if scroll exceeds threshold
+        if (Math.abs(scrollDelta) < this.scrollThreshold) {
+          this.ticking = false
+          return
+        }
+
+        // Hide on scroll down, show on scroll up
+        if (scrollDelta > 0 && currentScrollY > this.topThreshold) {
+          this.header?.classList.add('is-hidden')
+        } else if (scrollDelta < 0) {
+          this.header?.classList.remove('is-hidden')
+        }
+      }
+
+      this.lastScrollY = currentScrollY
+      this.ticking = false
+    }
+  }
+
+  // Initialize controller
+  new HeaderController()
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:page-load', () => {
+    new HeaderController()
+  })
+</script>

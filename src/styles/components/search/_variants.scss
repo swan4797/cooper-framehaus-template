@@ -1,0 +1,210 @@
+// ========================================
+// SEARCH BAR VARIANT STYLES
+// Layout variants for different contexts
+// ========================================
+
+@use '../../tokens/colors' as colors;
+@use '../../tokens/effects' as effects;
+@use '../../tokens/spacing' as spacing;
+@use '../../tokens/typography' as typography;
+@use '../../mixins' as *;
+
+// ----------------------------------------
+// SEARCH BAR VARIANTS
+// ----------------------------------------
+
+.search-bar {
+
+  // ----------------------------------------
+  // VARIANT: SIDEBAR
+  // Full-featured search for search pages
+  // ----------------------------------------
+
+  &--sidebar {
+    .search-bar__form {
+      background: colors.$color-bg-secondary;
+      padding: spacing.$space-6;
+      box-shadow: effects.$shadow-sm;
+      border: 1px solid colors.$color-border-light;
+      border-radius: effects.$radius-xl;
+
+      @include mobile-only {
+        padding: spacing.$space-5;
+      }
+    }
+  }
+
+  // ----------------------------------------
+  // VARIANT: HERO
+  // Compact horizontal layout for homepages
+  // ----------------------------------------
+
+  &--hero {
+    .search-bar__form {
+      background: colors.$color-bg-secondary;
+      padding: spacing.$space-3;
+      border-radius: effects.$radius-xl;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+    }
+
+    .search-bar__main-fields {
+      @include md {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: spacing.$space-3;
+      }
+
+      @include lg {
+        grid-template-columns: 2fr 1fr 1fr auto;
+      }
+
+      @include mobile-only {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .search-bar__label {
+      display: none;
+    }
+
+    .search-bar__input,
+    .search-bar__select {
+      height: 56px;
+      font-size: typography.$font-size-base;
+    }
+
+    .search-bar__btn {
+      height: 56px;
+      font-size: typography.$font-size-base;
+    }
+
+    .search-bar__field-row {
+      @include md {
+        grid-template-columns: 1fr;
+        gap: spacing.$space-3;
+      }
+    }
+
+    .search-bar__actions {
+      padding-top: 0;
+
+      @include md {
+        flex-direction: row;
+      }
+    }
+  }
+
+  // ----------------------------------------
+  // VARIANT: COMPACT
+  // Smaller version for widgets/cards
+  // ----------------------------------------
+
+  &--compact {
+    .search-bar__form {
+      background: colors.$color-bg-secondary;
+      padding: spacing.$space-4;
+      border-radius: effects.$radius-lg;
+      box-shadow: effects.$shadow-md;
+    }
+
+    .search-bar__main-fields {
+      gap: spacing.$space-3;
+
+      @include sm {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+    }
+
+    .search-bar__input,
+    .search-bar__select {
+      height: 44px;
+      font-size: typography.$font-size-sm;
+    }
+
+    .search-bar__btn {
+      padding: spacing.$space-3 spacing.$space-5;
+    }
+
+    .search-bar__actions {
+      padding-top: spacing.$space-1;
+    }
+  }
+
+  // ----------------------------------------
+  // VARIANT: INLINE
+  // No container styling, inherits parent
+  // ----------------------------------------
+
+  &--inline {
+    .search-bar__form {
+      padding: 0;
+      background: colors.$color-bg-secondary;
+      box-shadow: none;
+      border: none;
+    }
+
+    .search-bar__actions {
+      flex-direction: column;
+    }
+  }
+
+  // ----------------------------------------
+  // VARIANT: MINIMAL
+  // Very simple, just fields
+  // ----------------------------------------
+
+  &--minimal {
+    .search-bar__form {
+      padding: 0;
+      background: colors.$color-bg-secondary;
+      box-shadow: none;
+      border: none;
+      gap: spacing.$space-3;
+    }
+
+    .search-bar__toggle-group {
+      margin-bottom: 0;
+    }
+
+    .search-bar__actions {
+      padding-top: 0;
+    }
+  }
+
+  // ----------------------------------------
+  // VARIANT: FLOATING
+  // For overlaying on hero images
+  // ----------------------------------------
+
+  &--floating {
+    .search-bar__form {
+      background: colors.$color-bg-secondary;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: spacing.$space-6;
+      border-radius: effects.$radius-xl;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  // ----------------------------------------
+  // VARIANT: CARD
+  // For use inside card components
+  // ----------------------------------------
+
+  &--card {
+    .search-bar__form {
+      background: colors.$color-bg-secondary;
+      padding: spacing.$space-5;
+      border: 1px solid colors.$color-border-light;
+      border-radius: effects.$radius-lg;
+    }
+
+    .search-bar__input,
+    .search-bar__select {
+      background: colors.$color-bg-secondary;
+    }
+  }
+}

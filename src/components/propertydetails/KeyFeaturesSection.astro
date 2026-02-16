@@ -1,0 +1,119 @@
+---
+// ========================================
+// KEY FEATURES SECTION COMPONENT
+// Two-column layout with autonomous image slider
+// Styles in: src/styles/pages/property-details/_key-features-section.scss
+// ========================================
+
+interface PropertyMedia {
+  file_url: string
+  alt_text?: string
+  media_type?: string
+  display_order: number
+}
+
+interface Props {
+  features?: string[]
+  images?: PropertyMedia[]
+  propertyAddress?: string
+}
+
+const { features, images, propertyAddress } = Astro.props
+
+// Filter and sort images (only 'image' type)
+const galleryImages = (images || [])
+  .filter(img => img.media_type === 'image')
+  .sort((a, b) => a.display_order - b.display_order)
+  .slice(0, 6)
+
+const hasImages = galleryImages.length > 0
+const hasFeatures = features && features.length > 0
+---
+
+{hasFeatures && (
+  <section class="features-section">
+    <div class="features-section__container">
+      <!-- Two-Column Layout -->
+      <div class="features-section__grid">
+        <!-- Left Column - Features -->
+        <div class="features-section__content">
+          <!-- Section Header -->
+          <div class="features-section__header">
+            <span class="features-section__eyebrow">Property Highlights</span>
+            <h2 class="features-section__heading">
+              Key Features
+            </h2>
+            <p class="features-section__intro">
+              The standout features that make this property exceptional.
+            </p>
+          </div>
+
+          <!-- Features List -->
+          <div class="features-section__list">
+            {features.map((feature) => (
+              <div class="features-section__item">
+                <div class="features-section__item-icon">
+                  <svg viewBox="0 0 24 24">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+                <span class="features-section__item-text">
+                  {feature}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Right Column - Image Slider -->
+        {hasImages && (
+          <div class="features-section__gallery">
+            <div class="features-section__slider" data-slider>
+              {galleryImages.map((image, index) => (
+                <div
+                  class={`features-section__slide ${index === 0 ? 'features-section__slide--active' : ''}`}
+                  data-slide-index={index}
+                >
+                  <img
+                    src={image.file_url}
+                    alt={image.alt_text || `${propertyAddress || 'Property'} - Image ${index + 1}`}
+                    class="features-section__slide-img"
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+)}
+
+<script>
+  // Auto-advancing slider
+  document.addEventListener('DOMContentLoaded', () => {
+    const sliders = document.querySelectorAll('[data-slider]')
+
+    sliders.forEach((slider) => {
+      const slides = slider.querySelectorAll('[data-slide-index]')
+      if (slides.length <= 1) return
+
+      let currentSlide = 0
+
+      const showSlide = (index: number) => {
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('features-section__slide--active', i === index)
+        })
+      }
+
+      const nextSlide = () => {
+        currentSlide = (currentSlide + 1) % slides.length
+        showSlide(currentSlide)
+      }
+
+      // Auto-advance every 4 seconds
+      setInterval(nextSlide, 4000)
+    })
+  })
+</script>

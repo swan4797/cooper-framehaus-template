@@ -1,0 +1,639 @@
+// ========================================
+// TEAM PAGE STYLES
+// Using centralized design tokens
+// ========================================
+
+// Import centralized tokens
+@use '../../tokens/colors' as colors;
+@use '../../tokens/typography' as typography;
+@use '../../tokens/spacing' as spacing;
+@use '../../tokens/effects' as effects;
+@use '../../mixins' as *;
+
+// ========================================
+// LOCAL DESIGN TOKENS
+// Page-specific aliases referencing centralized tokens
+// ========================================
+
+// Colors - Reference centralized tokens
+$accent-color: colors.$color-primary;
+$accent-color-hover: colors.$color-primary-dark;
+$text-primary: colors.$color-text-primary;
+$text-secondary: colors.$color-text-secondary;
+$text-muted: colors.$color-text-muted;
+$bg-white: colors.$color-bg-primary;
+$bg-cream: colors.$color-bg-secondary;
+$bg-light: colors.$color-bg-tertiary;
+$bg-navy: colors.$color-bg-dark;
+$border-light: colors.$color-border-light;
+
+// Typography - Reference centralized tokens
+$font-serif: typography.$font-family-heading;
+$font-sans: typography.$font-family-base;
+
+// Layout
+$page-max-width: 95%;
+$content-max-width: 680px;
+$section-spacing: 5rem;
+$section-spacing-mobile: 3.5rem;
+$grid-gap: 1.25rem;
+
+// Effects - Reference centralized tokens
+$radius-sm: effects.$radius-sm;
+$radius-md: effects.$radius-md;
+$radius-lg: effects.$radius-lg;
+$radius-xl: effects.$radius-xl;
+
+$shadow-sm: effects.$shadow-sm;
+$shadow-md: effects.$shadow-md;
+$shadow-lg: effects.$shadow-lg;
+
+$transition-fast: effects.$transition-fast;
+$transition-base: effects.$transition-base;
+
+
+  .team-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    align-items: center;
+    width: 100%;
+  }
+
+  // ----------------------------------------
+  // FEATURED GRID
+  // ----------------------------------------
+
+  .team-grid__featured {
+    display: grid;
+    width: 100%;
+    margin: 0 auto;
+    grid-template-columns: repeat(2, 1fr);
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+
+  // ----------------------------------------
+  // REGULAR GRID
+  // ----------------------------------------
+
+  .team-grid__regular {
+    display: grid;
+    width: 100%;
+    margin: 0 auto;
+    grid-template-columns: repeat(2, 1fr);
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  // ----------------------------------------
+  // GAP
+  // ----------------------------------------
+
+  .team-grid__featured--gap-sm,
+  .team-grid__regular--gap-sm {
+    gap: 1rem;
+  }
+
+  .team-grid__featured--gap-md,
+  .team-grid__regular--gap-md {
+    gap: 1.5rem;
+  }
+
+  .team-grid__featured--gap-lg,
+  .team-grid__regular--gap-lg {
+    gap: 2rem;
+  }
+
+  // ----------------------------------------
+  // EMPTY STATE
+  // ----------------------------------------
+
+  .team-grid__empty {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background: colors.$color-bg-secondary;
+    border-radius: var(--radius-lg);
+    width: 100%;
+
+    p {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--color-text-muted);
+    }
+  }
+
+
+  // ========================================
+// TEAM PAGE STYLES
+// Premium editorial design with masonry layout
+// Two-column grid with alternating card patterns
+// ========================================
+
+// ========================================
+// PAGE LAYOUT
+// ========================================
+
+.team-page {
+  background: colors.$color-bg-secondary;
+  font-family: $font-sans;
+  min-height: 100vh;
+}
+
+// ========================================
+// HERO SECTION
+// Premium centered hero with serif typography
+// ========================================
+
+.team-hero {
+  padding: 10rem 1.5rem 4rem;
+  text-align: center;
+  background: colors.$color-bg-secondary;
+
+  @media (max-width: 768px) {
+    padding: 8rem 1.25rem 3rem;
+  }
+}
+
+.team-hero__container {
+  max-width: $content-max-width;
+  margin: 0 auto;
+}
+
+.team-hero__title {
+  font-family: $font-serif;
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 400;
+  color: $text-primary;
+  margin: 0 0 1.25rem 0;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.team-hero__subtitle {
+  font-family: $font-sans;
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: $text-secondary;
+  margin: 0;
+  line-height: 1.7;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+}
+
+.team-hero__divider {
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    margin-top: 2rem;
+  }
+}
+
+.team-hero__icon {
+  width: 2rem;
+  height: 2rem;
+  color: $accent-color;
+  opacity: 0.5;
+}
+
+// ========================================
+// TEAM SECTION
+// ========================================
+
+.team-section {
+  padding: $section-spacing 1.5rem;
+  background: colors.$color-bg-secondary;
+
+  @media (max-width: 768px) {
+    padding: $section-spacing-mobile 1.25rem;
+  }
+}
+
+.team-section__container {
+  max-width: $page-max-width;
+  margin: 0 auto;
+}
+
+// ========================================
+// TWO-COLUMN MASONRY GRID
+// Alternating image-first / text-first rows
+// ========================================
+
+.team-grid--editorial {
+  // Main wrapper
+  :global(.team-grid) {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  } 
+
+  // Both featured and regular grids use 2-column layout
+  :global(.team-grid__featured),
+  :global(.team-grid__regular) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $grid-gap;
+    max-width: 100% !important;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+  }
+
+  // ----------------------------------------
+  // ALTERNATING ROW PATTERN
+  // Creates left-right, right-left rhythm
+  // ----------------------------------------
+
+  :global(.team-grid__regular),
+  :global(.team-grid__featured) {
+
+    // ========================================
+    // ROW 1 PATTERN: Image-heavy LEFT, Text-heavy RIGHT
+    // Cards 1-2, 5-6, 9-10, etc.
+    // ========================================
+
+    // Card 1 (left): Image-dominant layout
+    :global(.team-card:nth-child(4n + 1)) {
+      grid-template-columns: 1.4fr 1fr;
+
+      :global(.team-card__image-col) {
+        min-height: 20rem;
+      }
+
+      :global(.team-card__content-col) {
+        background: colors.$color-bg-secondary;
+      }
+    }
+
+    // Card 2 (right): Text-dominant layout
+    :global(.team-card:nth-child(4n + 2)) {
+      grid-template-columns: 1fr 1fr;
+
+      :global(.team-card__image-col) {
+        min-height: 16rem;
+        order: 2;
+      }
+
+      :global(.team-card__content-col) {
+        order: 1;
+        background: colors.$color-bg-secondary;
+        border-right: 1px solid $border-light;
+      }
+    }
+
+    // ========================================
+    // ROW 2 PATTERN: Text-heavy LEFT, Image-heavy RIGHT
+    // Cards 3-4, 7-8, 11-12, etc.
+    // ========================================
+
+    // Card 3 (left): Text-dominant layout
+    :global(.team-card:nth-child(4n + 3)) {
+      grid-template-columns: 1fr 1fr;
+
+      :global(.team-card__image-col) {
+        min-height: 16rem;
+        order: 2;
+      }
+
+      :global(.team-card__content-col) {
+        order: 1;
+        background: colors.$color-bg-secondary;
+      }
+    }
+
+    // Card 4 (right): Image-dominant layout
+    :global(.team-card:nth-child(4n + 4)),
+    :global(.team-card:nth-child(4n)) {
+      grid-template-columns: 1fr 1.4fr;
+
+      :global(.team-card__image-col) {
+        min-height: 20rem;
+        order: 2;
+      }
+
+      :global(.team-card__content-col) {
+        order: 1;
+        background: colors.$color-bg-secondary;
+      }
+    }
+
+    // ----------------------------------------
+    // MOBILE: Reset to standard stacked layout
+    // ----------------------------------------
+    @media (max-width: 900px) {
+      :global(.team-card) {
+        grid-template-columns: 1fr !important;
+
+        :global(.team-card__image-col) {
+          order: 1 !important;
+          min-height: 14rem !important;
+        }
+
+        :global(.team-card__content-col) {
+          order: 2 !important;
+        }
+      }
+    }
+  }
+
+  // Featured section spacing
+  :global(.team-grid__featured) {
+    margin-bottom: 1rem;
+
+    :global(.team-card) {
+      border-color: rgba(255, 90, 95, 0.15);
+
+      &:hover {
+        border-color: rgba(255, 90, 95, 0.25);
+      }
+    }
+  }
+}
+
+// ========================================
+// CTA CARD (Within Grid)
+// Dark navy card positioned at bottom-left
+// ========================================
+
+.team-cta-card {
+  margin-top: 2rem;
+  max-width: calc(50% - #{$grid-gap / 2});
+  background: colors.$color-bg-secondary;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  transition: transform $transition-base, box-shadow $transition-base;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-lg;
+  }
+
+  @media (max-width: 900px) {
+    max-width: 100%;
+  }
+}
+
+.team-cta-card__content {
+  padding: 2.5rem;
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+  }
+}
+
+.team-cta-card__title {
+  font-family: $font-serif;
+  font-size: 1.625rem;
+  font-weight: 400;
+  color: $bg-white;
+  margin: 0 0 0.75rem 0;
+  letter-spacing: -0.02em;
+}
+
+.team-cta-card__text {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.65;
+  margin: 0 0 1.75rem 0;
+}
+
+.team-cta-card__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: $font-sans;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: $bg-white;
+  background: colors.$color-bg-secondary;
+  padding: 1rem 1.75rem;
+  border-radius: $radius-sm;
+  text-decoration: none;
+  transition: background $transition-fast, transform $transition-fast;
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    transition: transform $transition-fast;
+  }
+
+  &:hover {
+    background: colors.$color-bg-secondary;
+
+    svg {
+      transform: translateX(4px);
+    }
+  }
+}
+
+// ========================================
+// CONTACT CTA SECTION
+// Full-width bottom CTA
+// ========================================
+
+.team-contact {
+  padding: $section-spacing 1.5rem;
+  background: colors.$color-bg-secondary;
+
+  @media (max-width: 768px) {
+    padding: $section-spacing-mobile 1.25rem;
+  }
+}
+
+.team-contact__container {
+  max-width: $content-max-width;
+  margin: 0 auto;
+}
+
+.team-contact__content {
+  text-align: center;
+}
+
+.team-contact__label {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: $accent-color;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+}
+
+.team-contact__title {
+  font-family: $font-serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 400;
+  color: $text-primary;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
+}
+
+.team-contact__text {
+  font-size: 1rem;
+  color: $text-secondary;
+  line-height: 1.7;
+  margin: 0 0 2rem 0;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.team-contact__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+
+  @media (min-width: 480px) {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+  }
+}
+
+.team-contact__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3.25rem;
+  padding: 0 2rem;
+  font-family: $font-sans;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: $radius-sm;
+  transition: all $transition-fast;
+
+  @media (max-width: 479px) {
+    width: 100%;
+  }
+
+  &--primary {
+    background: colors.$color-bg-secondary;
+    color: $bg-white;
+
+    &:hover {
+      background: colors.$color-bg-secondary;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(255, 90, 95, 0.3);
+    }
+  }
+
+  &--secondary {
+    background: colors.$color-bg-secondary;
+    color: $text-primary;
+    border: 1.5px solid $border-light;
+
+    &:hover {
+      border-color: $accent-color;
+      color: $accent-color;
+    }
+  }
+}
+
+// ========================================
+// EMPTY STATE
+// ========================================
+
+.team-grid__empty {
+  text-align: center;
+  padding: 4rem 1.5rem;
+  background: colors.$color-bg-secondary;
+  border-radius: $radius-xl;
+  border: 1px solid $border-light;
+  grid-column: 1 / -1;
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    color: $text-muted;
+  }
+}
+
+// ========================================
+// LEGACY SUPPORT
+// ========================================
+
+.team-header {
+  @extend .team-hero;
+}
+
+.team-header__content {
+  @extend .team-hero__container;
+}
+
+.team-header__title {
+  @extend .team-hero__title;
+}
+
+.team-header__subtitle {
+  @extend .team-hero__subtitle;
+}
+
+.team-stats {
+  display: none;
+}
+
+.stat-card,
+.stat-item {
+  display: none;
+}
+
+.team-cta {
+  @extend .team-contact;
+}
+
+.team-cta__container {
+  @extend .team-contact__container;
+}
+
+.team-cta__content {
+  @extend .team-contact__content;
+}
+
+.team-cta__title {
+  @extend .team-contact__title;
+}
+
+.team-cta__text {
+  @extend .team-contact__text;
+}
+
+.team-cta__actions {
+  @extend .team-contact__actions;
+}
+
+.team-cta__btn {
+  @extend .team-contact__btn;
+
+  &--primary {
+    @extend .team-contact__btn--primary;
+  }
+
+  &--secondary {
+    @extend .team-contact__btn--secondary;
+  }
+}
+
+.team-section__header,
+.team-section__title,
+.team-section__subtitle {
+  display: none;
+}

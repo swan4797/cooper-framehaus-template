@@ -1,0 +1,110 @@
+---
+// ========================================
+// TEAM PAGE
+// Clean, modern team page aligned with template design
+// Uses configurable TeamGrid component
+// ========================================
+
+import Layout from '../layouts/Layout.astro'
+import TeamGrid from '../components/team/layouts/TeamGrid.astro'
+import { getTeamMembers } from '../lib/api'
+import { fetchBrandSettings, getContactInfo } from '../lib/brand'
+
+// Fetch brand settings
+const brand = await fetchBrandSettings()
+const contact = getContactInfo(brand)
+
+// Fetch team members
+const teamResponse = await getTeamMembers({ limit: 50 })
+const allMembers = teamResponse?.members || []
+
+const pageTitle = `Our Team | ${brand.business_name}`
+const pageDescription = `Meet the dedicated team at ${brand.business_name}. Our experienced property professionals are here to help with all your real estate needs.`
+
+// Stats
+const stats = [
+  { value: allMembers.length.toString(), label: 'Team Members', icon: 'users' },
+  { value: '15+', label: 'Years Experience', icon: 'check' },
+  { value: '98%', label: 'Client Satisfaction', icon: 'star' }
+]
+---
+
+<Layout title={pageTitle} description={pageDescription} headerVariant="solid">
+  <div class="team-page">
+
+    <!-- Hero Section -->
+    <section class="team-hero">
+      <div class="team-hero__container">
+        <h1 class="team-hero__title">Our Team</h1>
+        <p class="team-hero__subtitle">
+          Meet the dedicated professionals behind our success. Our experienced team brings local expertise and personalized service to every client.
+        </p>
+
+        <!-- Decorative Divider -->
+        <div class="team-hero__divider">
+          <svg class="team-hero__icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M20 4L4 16V36H16V24H24V36H36V16L20 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Grid Section -->
+    <section class="team-section">
+      <div class="team-section__container">
+        <TeamGrid
+          members={allMembers}
+          configId="fullPage"
+          showFeatured={true}
+          emptyMessage="No team members yet. Check back soon to meet our team."
+          class="team-grid--editorial"
+        />
+
+        <!-- CTA Card (positioned within grid flow) -->
+        <div class="team-cta-card">
+          <div class="team-cta-card__content">
+            <h3 class="team-cta-card__title">Join Our Team</h3>
+            <p class="team-cta-card__text">
+              We're always looking for talented individuals who share our passion for property and exceptional service.
+            </p>
+            <a href="/contact" class="team-cta-card__btn">
+              Get in Touch
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact CTA Section -->
+    <section class="team-contact">
+      <div class="team-contact__container">
+        <div class="team-contact__content">
+          <span class="team-contact__label">Get Started</span>
+          <h2 class="team-contact__title">Ready to Work With Us?</h2>
+          <p class="team-contact__text">
+            Our team is here to help with all your property needs. Whether you're buying, selling, or letting, we'd love to hear from you.
+          </p>
+          <div class="team-contact__actions">
+            <a href="/contact" class="team-contact__btn team-contact__btn--primary">
+              Contact Us
+            </a>
+            {contact.email && (
+              <a href={`mailto:${contact.email}?subject=Career%20Enquiry`} class="team-contact__btn team-contact__btn--secondary">
+                Email: {contact.email}
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</Layout>
+
+<style lang="scss">
+  @use '../styles/pages/team';
+</style>
