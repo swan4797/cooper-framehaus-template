@@ -15,26 +15,31 @@ import { getSessionId, getVisitorId } from '../session'
 // ========================================
 
 /**
+ * Toggle favourite result with count
+ */
+export interface ToggleFavouriteResult {
+  is_favourited: boolean
+  count: number
+}
+
+/**
  * Toggle favourite (add/remove)
- * Returns true if now favourited, false if unfavourited
+ * Server auto-detects current state - no need for client-side pre-check
+ * Returns object with is_favourited and updated count
  */
 export async function toggleFavourite(
   config: RequiredTrackerConfig,
   propertyId: string,
   log: (...args: any[]) => void,
   source: string = 'unknown'
-): Promise<boolean> {
+): Promise<ToggleFavouriteResult> {
   const visitorId = getVisitorId()
   const sessionId = getSessionId()
 
   try {
-    // Check current state
-    const isFavouritedNow = await isFavourited(config, propertyId, log)
-    const action = isFavouritedNow ? 'unfavourite' : 'favourite'
+    log('Toggling favourite for property:', propertyId)
 
-    log('Toggling favourite:', action, propertyId)
-
-    // Call API
+    // Call API - server will auto-detect and toggle
     const response = await fetch(
       `${config.apiUrl}/functions/v1/toggle-favourite`,
       {
@@ -43,12 +48,12 @@ export async function toggleFavourite(
           'Content-Type': 'application/json',
           'x-api-key': config.apiKey,
         },
-        credentials: 'omit', // Prevent CORS credential issues
+        credentials: 'omit',
         body: JSON.stringify({
           visitor_id: visitorId,
           session_id: sessionId,
           property_id: propertyId,
-          action,
+          // No 'action' - let server auto-detect
           source,
         }),
       }
@@ -57,7 +62,7 @@ export async function toggleFavourite(
     if (!response.ok) {
       const error = await response.json()
       console.error('[StratosTracker] Toggle favourite failed:', error)
-      return isFavouritedNow // Return current state on error
+      return { is_favourited: false, count: 0 }
     }
 
     const result = await response.json()
@@ -65,7 +70,7 @@ export async function toggleFavourite(
 
     // Track as event for analytics
     const payload = buildEventPayload(
-      action === 'favourite' ? 'property_favourited' : 'property_unfavourited',
+      result.is_favourited ? 'property_favourited' : 'property_unfavourited',
       {
         property_id: propertyId,
         source,
@@ -74,10 +79,13 @@ export async function toggleFavourite(
 
     sendEvent(config, payload, log)
 
-    return result.is_favourited
+    return {
+      is_favourited: result.is_favourited,
+      count: result.count || 0
+    }
   } catch (error) {
     console.error('[StratosTracker] Error toggling favourite:', error)
-    return false
+    return { is_favourited: false, count: 0 }
   }
 }
 

@@ -458,11 +458,12 @@ export class StratosTracker {
 
   /**
    * Toggle favourite (add/remove)
+   * Returns object with is_favourited boolean and updated count
    */
-  public async toggleFavourite(propertyId: string, source: string = 'unknown'): Promise<boolean> {
+  public async toggleFavourite(propertyId: string, source: string = 'unknown'): Promise<favouritesModule.ToggleFavouriteResult> {
     if (!this.canTrack()) {
       this.log('Tracking not allowed, skipping favourite toggle')
-      return false
+      return { is_favourited: false, count: 0 }
     }
     return favouritesModule.toggleFavourite(this.config, propertyId, this.log.bind(this), source)
   }
