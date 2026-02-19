@@ -15,6 +15,7 @@ import PropertyGridSlider from '../components/properties/grids/PropertyGridSlide
 import ReviewCarousel from '../components/reviews/ReviewCarousel.astro'
 import { siteConfig } from '../lib/config'
 import PropertyGrid from '../components/properties/grids/PropertyGrid.astro'           
+import IntroSection from '../components/static-page/layouts/IntroSection.astro'
 
 // Brand utilities
 import {
@@ -185,10 +186,34 @@ const experienceItems = [
     description={brand.mission_statement || "Discover exceptional properties with personalized service from our experienced local team."}
     ctaText="Start your search"
     ctaLink="/search"
-    backgroundType="video"
+    backgroundType="image"
+    backgroundSrc="https://images.pexels.com/photos/3457299/pexels-photo-3457299.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
     overlayOpacity="medium"
-    phoneNumber={contact.phone || '+1234567890'}
+    showTicker={true}
+    tickerLogos={[
+      { src: "/logos/PRScheme.svg", alt: "Property Redress Scheme" },
+      { src: "/logos/Rightmove.png", alt: "Rightmove" },
+      { src: "/logos/Zoopla.png", alt: "Zoopla" },
+      { src: "/logos/propertymark.svg", alt: "Propertymark" },
+      { src: "/logos/OnTheMarket.png", alt: "OnTheMarket" },
+      { src: "/logos/TDS.png", alt: "Tenancy Deposit Scheme" },
+    ]}
   />
+
+  <!-- Intro Section -->
+  <IntroSection                                                                          
+    title="Who We Are"                                                                   
+    description="<p>Your description...</p>"                                             
+    ctaText="Schedule a Consult"                                                         
+    ctaLink="/contact"                                                                   
+    backgroundVariant="dark"                                                             
+    imageLeft={{ src:                                                                    
+  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80", alt:        
+  "Interior" }}                                                                          
+    imageRight={{ src:                                                                   
+  "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", alt: "Home" 
+  }}                                                                                     
+  />  
 
   <!-- Experiences Section -->
   <ServiceGrid

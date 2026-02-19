@@ -3,6 +3,7 @@
 // HERO COMPONENT
 // Premium landing-style hero with configurable background
 // Supports both video and image backgrounds
+// Full-viewport design with centered content
 // ========================================
 
 type BackgroundType = 'video' | 'image'
@@ -11,6 +12,7 @@ interface Props {
   // Content
   headline: string
   description?: string
+  eyebrowText?: string
   ctaText?: string
   ctaLink?: string
 
@@ -27,12 +29,17 @@ interface Props {
   showPhoneButton?: boolean
   phoneNumber?: string
   showScrollIndicator?: boolean
+
+  // Footer ticker / logo marquee
+  showTicker?: boolean
+  tickerLogos?: Array<{ src: string; alt: string }>
 }
 
 const {
   // Content
   headline,
   description = '',
+  eyebrowText = '',
   ctaText = 'Start your search',
   ctaLink = '/search',
 
@@ -49,6 +56,10 @@ const {
   showPhoneButton = true,
   phoneNumber = '+1234567890',
   showScrollIndicator = true,
+
+  // Footer ticker
+  showTicker = false,
+  tickerLogos = [],
 } = Astro.props
 
 // Determine overlay class based on opacity setting
@@ -80,38 +91,77 @@ const overlayClass = `hero__overlay hero__overlay--${overlayOpacity}`
     <div class={overlayClass}></div>
   </div>
 
-  <!-- Centered Content -->
-  <div class="hero__content">
-    <h1 class="hero__headline">
-      {headline}
-    </h1>
-    {description && (
-      <p class="hero__description">
-        {description}
-      </p>
-    )}
-    {ctaText && ctaLink && (
-      <a href={ctaLink} class="hero__cta">
-        {ctaText}
-      </a>
-    )}
+  <!-- Centered Content Container -->
+  <div class="hero__content-wrapper">
+    <div class="hero__content">
+      <!-- Eyebrow Text -->
+      {eyebrowText && (
+        <span class="hero__eyebrow">{eyebrowText}</span>
+      )}
+
+      <!-- Main Headline -->
+      <h1 class="hero__headline">
+        {headline}
+      </h1>
+
+      <!-- Description -->
+      {description && (
+        <p class="hero__description">
+          {description}
+        </p>
+      )}
+
+      <!-- CTA Button - Pill Shape -->
+      {ctaText && ctaLink && (
+        <a href={ctaLink} class="hero__cta">
+          {ctaText}
+        </a>
+      )}
+    </div>
   </div>
 
-
   <!-- Floating Utility: Phone Link (Bottom Right) -->
-  {showPhoneButton && (
+  <!-- {showPhoneButton && (
     <a href={`tel:${phoneNumber}`} class="hero__phone-btn" aria-label="Call us">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
       </svg>
       <span>{phoneNumber}</span>
     </a>
-  )}
+  )} -->
 
   <!-- Scroll Indicator -->
   {showScrollIndicator && (
     <div class="hero__scroll-indicator">
       <div class="hero__scroll-line"></div>
+    </div>
+  )}
+
+  <!-- Footer Ticker / Logo Marquee -->
+  {showTicker && tickerLogos.length > 0 && (
+    <div class="hero__ticker">
+      <div class="hero__ticker-track">
+        <div class="hero__ticker-content">
+          {tickerLogos.map((logo) => (
+            <img
+              src={logo.src}
+              alt={logo.alt}
+              class="hero__ticker-logo"
+              loading="lazy"
+            />
+          ))}
+          {/* Duplicate for seamless loop */}
+          {tickerLogos.map((logo) => (
+            <img
+              src={logo.src}
+              alt={logo.alt}
+              class="hero__ticker-logo"
+              loading="lazy"
+              aria-hidden="true"
+            />
+          ))}
+        </div>
+      </div>
     </div>
   )}
 </section>

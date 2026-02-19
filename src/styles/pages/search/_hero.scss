@@ -1,5 +1,6 @@
 // ========================================
 // SEARCH HERO STYLES
+// Premium search page header matching property details aesthetic
 // Using centralized design tokens
 // ========================================
 
@@ -9,24 +10,29 @@
 
 .search-hero {
   position: relative;
-  background: colors.$color-bg-secondary;
-  padding: 2rem 1rem 2.5rem;
+  background: colors.$color-bg-primary;
+  padding: 2.5rem 1rem 3rem;
   overflow: hidden;
   border-bottom: 1px solid colors.$color-border-light;
 
   @include md {
-    padding: 3rem 2rem 3.5rem;
+    padding: 3.5rem 2rem 4rem;
   }
 
   @include lg {
-    padding: 4rem 2rem 5rem;
+    padding: 4.5rem 2rem 5.5rem;
   }
 }
 
 .search-hero__background {
   position: absolute;
   inset: 0;
-  background: colors.$color-bg-secondary;
+  background: linear-gradient(
+    135deg,
+    colors.$color-bg-secondary 0%,
+    colors.$color-bg-primary 50%,
+    colors.$color-bg-secondary 100%
+  );
   opacity: 0.5;
 }
 
@@ -37,7 +43,7 @@
 
 .search-hero__container {
   @include container;
-  max-width: 780px;
+  max-width: 880px;
   margin: 0 auto;
   padding-left: 0;
   padding-right: 0;
@@ -45,38 +51,42 @@
 
 .search-hero__title {
   font-family: typography.$font-family-heading;
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 500;
   color: colors.$color-text-primary;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.75rem 0;
   text-align: center;
   letter-spacing: -0.02em;
-  line-height: 1.2;
+  line-height: 1.15;
 
   @include md {
-    font-size: 2.5rem;
-    margin: 0 0 0.75rem 0;
+    font-size: 2.75rem;
+    margin: 0 0 1rem 0;
   }
 
   @include lg {
     font-size: 3.5rem;
+    letter-spacing: -0.03em;
   }
 }
 
 .search-hero__subtitle {
-  font-size: 0.9375rem;
+  font-size: 1rem;
   color: colors.$color-text-muted;
   text-align: center;
   margin: 0;
   font-weight: 400;
   letter-spacing: 0.01em;
   line-height: 1.6;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 
   @include md {
-    font-size: 1rem;
+    font-size: 1.0625rem;
   }
 
   @include lg {
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
   }
 }

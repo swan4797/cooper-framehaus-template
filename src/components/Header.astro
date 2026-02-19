@@ -90,7 +90,7 @@ export interface Props extends HeaderConfig {
 const variantPresets: Record<HeaderVariant, HeaderVariantConfig> = {
   transparent: {
     background: 'transparent',
-    textColor: 'var(--color-text-light-90)',
+    textColor: 'var(--color-text-light)',
     textHover: 'var(--color-accent)',
     borderColor: 'transparent',
     lightLogo: true,
@@ -372,7 +372,10 @@ const headerData = {
     </div>
   </div>
 
-  <!-- Mobile Menu -->
+  <!-- Mobile Menu Backdrop -->
+  <div class="header__mobile-backdrop" id="mobile-backdrop" aria-hidden="true"></div>
+
+  <!-- Mobile Menu Drawer -->
   <div class="header__mobile-menu" id="mobile-menu" aria-hidden="true">
     <nav class="header__mobile-nav" aria-label="Mobile navigation">
       <ul class="header__mobile-list">
@@ -432,6 +435,7 @@ const headerData = {
     private header: HTMLElement | null
     private mobileToggle: HTMLElement | null
     private mobileMenu: HTMLElement | null
+    private mobileBackdrop: HTMLElement | null
     private lastScrollY: number = 0
     private ticking: boolean = false
     private scrollThreshold: number = 10
@@ -441,6 +445,7 @@ const headerData = {
       this.header = document.getElementById('site-header')
       this.mobileToggle = document.getElementById('mobile-menu-toggle')
       this.mobileMenu = document.getElementById('mobile-menu')
+      this.mobileBackdrop = document.getElementById('mobile-backdrop')
 
       this.init()
     }
@@ -466,6 +471,9 @@ const headerData = {
 
     private setupMobileMenu(): void {
       this.mobileToggle?.addEventListener('click', () => this.toggleMobileMenu())
+
+      // Close on backdrop click (for slide-in drawer)
+      this.mobileBackdrop?.addEventListener('click', () => this.closeMobileMenu())
 
       // Close on link click
       this.mobileMenu?.querySelectorAll('a').forEach(link => {

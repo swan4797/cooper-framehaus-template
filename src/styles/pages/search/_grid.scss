@@ -1,5 +1,6 @@
 // ========================================
 // SEARCH PAGE GRID STYLES
+// Premium layout grid for sidebar + results
 // Using centralized design tokens
 // ========================================
 
@@ -8,7 +9,7 @@
 
 // Local layout tokens
 $search-content-width: 95%;
-$search-sidebar-width: 340px;
+$search-sidebar-width: 360px;
 
 .search-page__container {
   width: 100%;
@@ -21,37 +22,42 @@ $search-sidebar-width: 340px;
     padding-left: 2rem;
     padding-right: 2rem;
   }
+
+  @include lg {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
 }
 
 .search-page__main {
-  padding-top: 1.5rem;
-  padding-bottom: 3rem;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
   position: relative;
   z-index: 2;
 
   @include md {
-    padding-top: 2rem;
-    padding-bottom: 4rem;
+    padding-top: 2.5rem;
+    padding-bottom: 5rem;
   }
 
   @include lg {
-    padding-top: 2.5rem;
-    padding-bottom: 5rem;
+    padding-top: 3rem;
+    padding-bottom: 6rem;
   }
 }
 
 .search-page__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 2rem;
   align-items: start;
 
   @include md {
-    gap: 2rem;
+    gap: 2.5rem;
   }
 
   @include lg {
     grid-template-columns: $search-sidebar-width 1fr;
-    gap: 2.5rem;
+    gap: 3rem;
   }
 }

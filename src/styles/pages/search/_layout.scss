@@ -1,5 +1,6 @@
 // ========================================
 // SEARCH PAGE LAYOUT STYLES
+// Premium luxury layout matching property details
 // Using centralized design tokens
 // ========================================
 
@@ -11,4 +12,11 @@
   min-height: 100vh;
   background: colors.$color-bg-secondary;
   font-family: typography.$font-family-base;
+}
+
+// Search page layout wrapper
+.search-page-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }

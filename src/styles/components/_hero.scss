@@ -1,6 +1,8 @@
 // ========================================
 // HERO COMPONENT STYLES
 // Premium landing-style hero with full-viewport background
+// Centered content with eyebrow, headline, description, and CTA
+// Footer ticker/logo marquee support
 // Using centralized color tokens from tokens/_colors.scss
 // ========================================
 
@@ -11,30 +13,27 @@
 
 // ========================================
 // HERO BASE
+// Full viewport width and minimum height (100vw, 100vh)
 // ========================================
 
 .hero {
   position: relative;
+  width: 100%;
   min-height: 100vh;
   display: flex;
-  align-items: end;
-  justify-content: start;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  padding-bottom: 8%;
-  padding-left: 6.2%;
-  margin-top: -4.5em;
-
 
   @include mobile-only {
-    padding-left: 0;
-    align-items: center;
-    padding-bottom: 0;
+    min-height: 100svh; // Use small viewport height for mobile
   }
-
 }
 
 // ========================================
 // BACKGROUND & OVERLAY
+// Background image/video with cover sizing
+// Dark overlay via ::before pseudo-element
 // ========================================
 
 .hero__background {
@@ -71,6 +70,7 @@
 
 // ========================================
 // OVERLAY VARIANTS
+// Dark overlay (rgba(0,0,0,0.4–0.5))
 // ========================================
 
 .hero__overlay {
@@ -80,21 +80,21 @@
   animation: hero-overlay-fade 1.2s ease forwards;
   animation-delay: 1.4s;
 
-  // Default medium overlay
+  // Default medium overlay (rgba(0,0,0,0.45))
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.4) 0%,
-    rgba(0, 0, 0, 0.2) 40%,
-    rgba(0, 0, 0, 0.3) 100%
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.35) 40%,
+    rgba(0, 0, 0, 0.45) 100%
   );
 
   // Light overlay variant
   &--light {
     background: linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.25) 0%,
-      rgba(0, 0, 0, 0.1) 40%,
-      rgba(0, 0, 0, 0.2) 100%
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0.2) 40%,
+      rgba(0, 0, 0, 0.3) 100%
     );
   }
 
@@ -102,9 +102,9 @@
   &--medium {
     background: linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.4) 0%,
-      rgba(0, 0, 0, 0.2) 40%,
-      rgba(0, 0, 0, 0.3) 100%
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0.35) 40%,
+      rgba(0, 0, 0, 0.45) 100%
     );
   }
 
@@ -112,37 +112,99 @@
   &--dark {
     background: linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.6) 0%,
-      rgba(0, 0, 0, 0.4) 40%,
-      rgba(0, 0, 0, 0.5) 100%
+      rgba(0, 0, 0, 0.65) 0%,
+      rgba(0, 0, 0, 0.45) 40%,
+      rgba(0, 0, 0, 0.55) 100%
     );
   }
 }
 
 // ========================================
-// HERO CONTENT
+// CONTENT WRAPPER
+// Flex container for vertical/horizontal centering
 // ========================================
 
-.hero__content {
+.hero__content-wrapper {
   position: relative;
   z-index: 1;
-  text-align: start;
-  max-width: 912px;
-  padding: 0 $spacing-6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: $spacing-20 $spacing-6;
 
   @include md {
-    padding: 0 $spacing-10;
+    padding: $spacing-24 $spacing-10;
+  }
+
+  @include mobile-only {
+    min-height: 100svh;
+    padding: $spacing-16 $spacing-4;
   }
 }
 
+// ========================================
+// HERO CONTENT
+// Content container with max-width 60rem-70rem
+// Text centered with flex column layout
+// ========================================
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 65rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+// ========================================
+// EYEBROW TEXT
+// Small font size (0.875rem–1rem)
+// Letter-spacing: 0.1em–0.15em
+// ========================================
+
+.hero__eyebrow {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: $font-weight-medium;
+  color: colors.$color-text-light-90;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 1rem;
+
+  // Animation: Slide up and fade in
+  opacity: 0;
+  transform: translateY(20px);
+  animation: hero-content-reveal 1s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  animation-delay: 1.6s;
+
+  @include md {
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.25rem;
+  }
+}
+
+// ========================================
+// MAIN HEADING
+// Large responsive font size (3.5rem–5rem)
+// Line-height: 1.1–1.2
+// Max-width: 20ch–25ch
+// ========================================
+
 .hero__headline {
   font-family: $font-family-heading;
-  font-size: clamp(2.5rem, 6vw, 6.5rem);
+  font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: $font-weight-semibold;
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: colors.$color-text-light;
-  margin-bottom: $spacing-6;
+  max-width: 22ch;
+  margin: 0 0 2rem 0;
 
   // Animation: Slide up and fade in
   opacity: 0;
@@ -153,17 +215,25 @@
   @include md {
     line-height: 1.15;
     letter-spacing: -0.03em;
-    margin-bottom: $spacing-8;
+    margin-bottom: 2.5rem;
+  }
+
+  @include lg {
+    margin-bottom: 3rem;
   }
 }
+
+// ========================================
+// DESCRIPTION
+// ========================================
 
 .hero__description {
   font-size: clamp(1rem, 2vw, 1.25rem);
   font-weight: $font-weight-regular;
   line-height: 1.6;
-  color: rgba(var(--color-text-light-rgb, 255, 255, 255), 0.9);  // Uses RGB variant for opacity
+  color: colors.$color-text-light-90;
   max-width: 600px;
-  // margin: 0 auto $spacing-10;
+  margin: 0 0 2rem 0;
 
   // Animation: Slide up and fade in (staggered)
   opacity: 0;
@@ -172,27 +242,33 @@
   animation-delay: 2.1s;
 
   @include md {
-    margin-bottom: $spacing-12;
+    margin-bottom: 2.5rem;
   }
 }
+
+// ========================================
+// CTA BUTTON
+// Pill shape (border-radius: 2rem)
+// Padding: ~1rem 2rem
+// Light/white background
+// ========================================
 
 .hero__cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: $spacing-4 $spacing-10;
+  padding: 1rem 2rem;
   font-family: $font-family-base;
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
   text-decoration: none;
-  color: colors.$color-text-light;
-  background: transparent;
-  border: 2px solid colors.$color-text-light;
-  border-radius: 0;
+  color: colors.$color-text-primary;
+  background: colors.$color-text-light;
+  border: none;
+  border-radius: 2rem; // Pill shape
   cursor: pointer;
   transition: all 0.3s ease;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
 
   // Animation: Fade in (staggered)
   opacity: 0;
@@ -202,12 +278,13 @@
 
   &:hover {
     background: colors.$color-bg-secondary;
-    color: colors.$color-text-primary;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   }
 
   @include md {
-    padding: $spacing-5 $spacing-12;
-    font-size: $font-size-sm;
+    padding: 1.125rem 2.5rem;
+    font-size: 1.0625rem;
   }
 }
 
@@ -264,9 +341,10 @@
   align-items: center;
   gap: $spacing-2;
   padding: $spacing-3 $spacing-5;
-  background: colors.$color-bg-secondary;
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(var(--color-text-light-rgb, 255, 255, 255), 0.3);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: $radius-full;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -290,8 +368,9 @@
   }
 
   &:hover {
-    background: colors.$color-bg-secondary;
-    border-color: rgba(var(--color-text-light-rgb, 255, 255, 255), 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-2px);
   }
 
   @include md {
@@ -335,6 +414,76 @@
 
   @include md {
     height: 80px;
+  }
+}
+
+// ========================================
+// FOOTER TICKER / LOGO MARQUEE
+// Positioned at bottom of hero section
+// Full-width with semi-transparent overlay
+// Infinite horizontal scroll animation
+// ========================================
+
+.hero__ticker {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+
+  // Animation
+  opacity: 0;
+  animation: hero-overlay-fade 0.8s ease forwards;
+  animation-delay: 2.8s;
+
+  @include md {
+    height: 6rem;
+  }
+}
+
+.hero__ticker-track {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+
+.hero__ticker-content {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 10rem;
+  align-items: center;
+  gap: 4rem;
+  animation: hero-ticker-scroll 30s linear infinite;
+  will-change: transform;
+
+  @include md {
+    grid-auto-columns: 12rem;
+    gap: 5rem;
+  }
+}
+
+.hero__ticker-logo {
+  width: 100%;
+  height: 2rem;
+  object-fit: contain;
+  opacity: 0.7;
+  filter: brightness(0) invert(1); // Make logos white
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  @include md {
+    height: 2.5rem;
+  }
+
+  @include lg {
+    height: 3rem;
   }
 }
 
@@ -390,5 +539,14 @@
   50% {
     opacity: 0.5;
     transform: scaleY(0.8);
+  }
+}
+
+@keyframes hero-ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }

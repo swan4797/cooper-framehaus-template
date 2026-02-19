@@ -79,25 +79,13 @@ const gridClasses = layout === 'asymmetric'
   )}
 
   <div class="service-grid__container">
+    <!-- Section Header -->
     <header class="service-grid__header">
-      <div class="service-grid__header-left">
-        <h2 class="service-grid__title">{title}</h2>
-      </div>
-      {(subtitle || ctaText) && (
-        <div class="service-grid__header-right">
-          {subtitle && <p class="service-grid__subtitle">{subtitle}</p>}
-          {ctaText && ctaLink && (
-            <a href={ctaLink} class="service-grid__cta">
-              {ctaText}
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </a>
-          )}
-        </div>
-      )}
+      <h2 class="service-grid__title">{title}</h2>
+      {subtitle && <p class="service-grid__subtitle">{subtitle}</p>}
     </header>
 
+    <!-- Card Grid -->
     <div class={gridClasses}>
       {items.map((item, index) => (
         <a
@@ -113,14 +101,25 @@ const gridClasses = layout === 'asymmetric'
             ) : (
               <div class="service-grid__card-image" style={`background-image: url('${item.mediaSrc}')`} />
             )}
-            <div class={`service-grid__card-overlay service-grid__card-overlay--${item.overlayOpacity || 'medium'}`}></div>
+            <div class="service-grid__card-overlay"></div>
           </div>
           <div class="service-grid__card-content">
             <h3 class="service-grid__card-title">{item.title}</h3>
+            <span class="service-grid__card-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </span>
           </div>
         </a>
       ))}
     </div>
+
+    {ctaText && ctaLink && (
+      <div class="service-grid__footer">
+        <a href={ctaLink} class="service-grid__cta">{ctaText}</a>
+      </div>
+    )}
   </div>
 </section>
 
