@@ -30,6 +30,7 @@ import {
   getSectionTitle,
   getSectionContent,
   getSectionImage,
+  getHeroImage,
   hasSection,
 } from '../lib/pages'
 
@@ -40,6 +41,9 @@ const contact = getContactInfo(brand)
 // Fetch homepage content from Stratos CRM
 const pageContent = await getPageContent('homepage')
 
+// Get hero image from CMS
+const heroImage = getHeroImage(pageContent)
+
 // ========================================
 // SPECIFIC SECTION BLOCK KEYS
 // These match the block_keys from Stratos CRM
@@ -49,9 +53,10 @@ const pageContent = await getPageContent('homepage')
 const featuredTitle = getSectionTitle(pageContent, 'featured_properties', 'Featured Properties')
 const featuredContent = getSectionContent(pageContent, 'featured_properties', '<p>Discover our handpicked selection of premium properties.</p>')
 
-// Why Choose Us section (block_key: why_choose_us)
+// Why Choose Us / Intro section (block_key: why_choose_us)
 const whyChooseTitle = getSectionTitle(pageContent, 'why_choose_us', 'Why Choose Us')
 const whyChooseContent = getSectionContent(pageContent, 'why_choose_us', '')
+const whyChooseImage = getSectionImage(pageContent, 'why_choose_us')
 
 // Testimonials section (block_key: testimonials)
 const testimonialsTitle = getSectionTitle(pageContent, 'testimonials', 'What Our Clients Say')
@@ -182,12 +187,12 @@ const experienceItems = [
 <Layout>
   <!-- Hero Section -->
   <Hero
-    headline={brand.tagline || "A Sprawling Coastal Escape"}
-    description={brand.mission_statement || "Discover exceptional properties with personalized service from our experienced local team."}
+    headline={pageContent?.page_title || brand.tagline || "A Sprawling Coastal Escape"}
+    description={pageContent?.content || brand.mission_statement || "Discover exceptional properties with personalized service from our experienced local team."}
     ctaText="Start your search"
     ctaLink="/search"
     backgroundType="image"
-    backgroundSrc="https://images.pexels.com/photos/3457299/pexels-photo-3457299.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+    backgroundSrc={heroImage?.url || "https://images.pexels.com/photos/3457299/pexels-photo-3457299.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"}
     overlayOpacity="medium"
     showTicker={true}
     tickerLogos={[
@@ -201,18 +206,18 @@ const experienceItems = [
   />
 
   <!-- Intro Section -->
-  <IntroSection                                                                          
-    title="Who We Are"                                                                   
-    description="<p>Your description...</p>"                                             
-    ctaText="Schedule a Consult"                                                         
-    ctaLink="/contact"                                                                   
-    backgroundVariant="dark"                                                             
-    imageLeft={{ src:                                                                    
-  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80", alt:        
-  "Interior" }}                                                                          
-    imageRight={{ src:                                                                   
-  "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", alt: "Home" 
-  }}                                                                                     
+  <IntroSection
+    title={whyChooseTitle || "Who We Are"}
+    description={whyChooseContent || "<p>Your local property experts.</p>"}
+    ctaText="Schedule a Consult"
+    ctaLink="/contact"
+    backgroundVariant="dark"
+    imageLeft={{ src: whyChooseImage?.url ||
+  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80", alt:
+  "Interior" }}
+    imageRight={{ src:
+  "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", alt: "Home"
+  }}
   />  
 
   <!-- Experiences Section -->
