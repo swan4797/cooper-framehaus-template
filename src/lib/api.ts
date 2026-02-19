@@ -114,7 +114,7 @@ class ApiClient {
    */
   private async get<T>(
     endpoint: string,
-    params?: Record<string, string | number | undefined>
+    params?: Record<string, string | number | string[] | undefined>
   ): Promise<ApiResponse<T>> {
     try {
       // Build URL with query parameters
@@ -122,7 +122,12 @@ class ApiClient {
       if (params) {
         Object.entries(params).forEach(([key, value]) => {
           if (value !== undefined) {
-            url.searchParams.append(key, String(value))
+            // Handle array parameters (e.g., listing_status[])
+            if (Array.isArray(value)) {
+              value.forEach(v => url.searchParams.append(key, String(v)))
+            } else {
+              url.searchParams.append(key, String(value))
+            }
           }
         })
       }

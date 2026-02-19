@@ -1,5 +1,7 @@
 // ========================================
 // INTRO SECTION STYLES
+// Elegant dark background with centered content
+// Optional decorative images on sides
 // ========================================
 
 @use '../tokens/colors' as colors;
@@ -10,14 +12,17 @@
 @use '../mixins' as *;
 
 .intro-section {
-  padding: spacing.$space-16 layout.$container-padding-mobile;
+  position: relative;
+  padding: 4rem 1.5rem;
+  background-color: colors.$color-bg-primary;
+  overflow: hidden;
 
   @include md {
-    padding: spacing.$space-20 layout.$container-padding;
+    padding: 5rem 2rem;
   }
 
   @include lg {
-    padding: spacing.$space-24 layout.$container-padding;
+    padding: 6rem 3rem;
   }
 
   // ----------------------------------------
@@ -37,36 +42,168 @@
   // ----------------------------------------
 
   &--bg-white {
-    background-color: colors.$color-bg-secondary;
+    background-color: colors.$color-white;
+
+    .intro-section__title {
+      color: colors.$color-text-primary;
+    }
+
+    .intro-section__description {
+      color: colors.$color-text-secondary;
+    }
+
+    .intro-section__btn--primary {
+      background-color: transparent;
+      color: colors.$color-text-primary;
+      border: 1px solid colors.$color-text-primary;
+
+      &:hover {
+        background-color: colors.$color-text-primary;
+        color: colors.$color-white;
+      }
+    }
   }
 
   &--bg-light {
     background-color: colors.$color-bg-secondary;
-  }
-
-  &--bg-dark {
-    background-color: colors.$color-bg-secondary;
-
-    .intro-section__subtitle {
-      color: colors.$color-primary-light;
-    }
 
     .intro-section__title {
-      color: colors.$color-text-light;
+      color: colors.$color-text-primary;
     }
 
     .intro-section__description {
-      color: colors.$color-white-85;
+      color: colors.$color-text-secondary;
+    }
+
+    .intro-section__btn--primary {
+      background-color: transparent;
+      color: colors.$color-text-primary;
+      border: 1px solid colors.$color-text-primary;
+
+      &:hover {
+        background-color: colors.$color-text-primary;
+        color: colors.$color-white;
+      }
+    }
+  }
+
+  &--bg-dark {
+    background-color: colors.$color-bg-primary;
+
+    .intro-section__subtitle {
+      color: colors.$color-accent;
+    }
+
+    .intro-section__title {
+      color: colors.$color-white;
+    }
+
+    .intro-section__description {
+      color: colors.$color-white-80;
+    }
+
+    .intro-section__btn--primary {
+      background-color: transparent;
+      color: colors.$color-white;
+      border: 1px solid colors.$color-white-40;
+
+      &:hover {
+        border-color: colors.$color-white;
+        background-color: colors.$color-white-10;
+      }
     }
 
     .intro-section__btn--secondary {
-      color: colors.$color-text-light;
-      border-color: colors.$color-white-35;
+      color: colors.$color-white;
+      border-color: colors.$color-white-30;
 
       &:hover {
-        border-color: colors.$color-white-55;
-        background-color: colors.$color-bg-secondary;
+        border-color: colors.$color-white-60;
+        background-color: colors.$color-white-05;
       }
+    }
+  }
+
+  // ----------------------------------------
+  // LAYOUT
+  // ----------------------------------------
+
+  &__layout {
+    display: flex;
+    justify-content: center;
+    max-width: 90rem;
+    margin: 0 auto;
+  }
+
+  // ----------------------------------------
+  // WITH IMAGES LAYOUT
+  // ----------------------------------------
+
+  &--with-images {
+    .intro-section__layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      align-items: center;
+
+      @include md {
+        grid-template-columns: 1fr 2fr 1fr;
+        gap: 2rem;
+      }
+
+      @include lg {
+        grid-template-columns: 1fr 1.5fr 1fr;
+        gap: 3rem;
+      }
+    }
+  }
+
+  // ----------------------------------------
+  // SIDE IMAGES
+  // ----------------------------------------
+
+  &__image {
+    display: none;
+
+    @include md {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      max-width: 280px;
+      max-height: 380px;
+      object-fit: contain;
+      border-radius: 0.25rem;
+
+      @include lg {
+        max-width: 320px;
+        max-height: 420px;
+      }
+    }
+
+    &--left {
+      @include md {
+        justify-content: flex-end;
+      }
+    }
+
+    &--right {
+      @include md {
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  &__image-spacer {
+    width: 100%;
+    max-width: 280px;
+
+    @include lg {
+      max-width: 320px;
     }
   }
 
@@ -75,8 +212,10 @@
   // ----------------------------------------
 
   &__container {
+    position: relative;
+    z-index: 1;
     width: 100%;
-    max-width: var(--intro-max-width, 48rem);
+    max-width: var(--intro-max-width, 42rem);
     margin-left: auto;
     margin-right: auto;
   }
@@ -122,13 +261,17 @@
 
   &__subtitle {
     display: inline-block;
-    font-family: typography.$font-family-body;
-    font-size: typography.$font-size-sm;
-    font-weight: typography.$font-weight-semibold;
-    color: colors.$color-primary;
+    font-family: typography.$font-family-base;
+    font-size: 0.75rem;
+    font-weight: typography.$font-weight-medium;
+    color: colors.$color-accent;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: spacing.$space-4;
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+
+    @include md {
+      font-size: 0.8125rem;
+    }
   }
 
   // ----------------------------------------
@@ -137,19 +280,22 @@
 
   &__title {
     font-family: typography.$font-family-heading;
-    font-size: typography.$font-size-3xl;
-    font-weight: typography.$font-weight-bold;
-    color: colors.$color-text-primary;
-    line-height: typography.$line-height-tight;
-    letter-spacing: -0.02em;
-    margin: 0 0 spacing.$space-6 0;
+    font-size: 1.5rem;
+    font-weight: typography.$font-weight-regular;
+    color: colors.$color-white;
+    line-height: 1.2;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0 0 2rem 0;
 
     @include md {
-      font-size: typography.$font-size-4xl;
+      font-size: 1.75rem;
+      margin-bottom: 2.5rem;
     }
 
     @include lg {
-      font-size: typography.$font-size-5xl;
+      font-size: 2rem;
+      letter-spacing: 0.2em;
     }
   }
 
@@ -158,21 +304,21 @@
   // ----------------------------------------
 
   &__description {
-    font-family: typography.$font-family-body;
-    font-size: typography.$font-size-lg;
+    font-family: typography.$font-family-base;
+    font-size: 0.9375rem;
     font-weight: typography.$font-weight-regular;
-    color: colors.$color-text-secondary;
-    line-height: typography.$line-height-relaxed;
-    max-width: 40rem;
-    margin: 0;
+    color: colors.$color-white-80;
+    line-height: 1.7;
+    max-width: 36rem;
+    margin: 0 auto;
 
     @include md {
-      font-size: typography.$font-size-xl;
+      font-size: 1rem;
     }
 
     // Handle CMS HTML content
     :global(p) {
-      margin: 0 0 spacing.$space-4 0;
+      margin: 0 0 1.25rem 0;
 
       &:last-child {
         margin-bottom: 0;
@@ -180,18 +326,22 @@
     }
 
     :global(strong) {
-      color: colors.$color-text-primary;
-      font-weight: typography.$font-weight-semibold;
+      color: colors.$color-white;
+      font-weight: typography.$font-weight-medium;
+    }
+
+    :global(em) {
+      font-style: italic;
     }
 
     :global(a) {
-      color: colors.$color-primary;
+      color: colors.$color-accent;
       text-decoration: underline;
-      text-underline-offset: 2px;
-      transition: color effects.$transition-fast;
+      text-underline-offset: 3px;
+      transition: color 0.3s ease;
 
       &:hover {
-        color: colors.$color-primary-dark;
+        color: colors.$color-white;
       }
     }
   }
@@ -203,12 +353,16 @@
   &__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: spacing.$space-4;
-    margin-top: spacing.$space-10;
+    gap: 1rem;
+    margin-top: 2.5rem;
+
+    @include md {
+      margin-top: 3rem;
+    }
 
     @include mobile-only {
       flex-direction: column;
-      align-items: stretch;
+      align-items: center;
     }
   }
 
@@ -220,64 +374,63 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: spacing.$space-2;
-    padding: spacing.$space-4 spacing.$space-8;
-    font-family: typography.$font-family-body;
-    font-size: typography.$font-size-base;
-    font-weight: typography.$font-weight-semibold;
+    gap: 0.5rem;
+    padding: 0.875rem 2rem;
+    font-family: typography.$font-family-base;
+    font-size: 0.75rem;
+    font-weight: typography.$font-weight-medium;
     text-decoration: none;
-    border-radius: effects.$radius-full;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    border-radius: 0;
     transition:
-      background-color effects.$transition-fast,
-      border-color effects.$transition-fast,
-      transform effects.$transition-fast,
-      box-shadow effects.$transition-fast;
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      color 0.3s ease;
     cursor: pointer;
 
+    @include md {
+      font-size: 0.8125rem;
+      padding: 1rem 2.5rem;
+    }
+
     svg {
-      width: 1.125rem;
-      height: 1.125rem;
-      transition: transform effects.$transition-fast;
+      width: 1rem;
+      height: 1rem;
+      transition: transform 0.3s ease;
     }
 
     &:hover svg {
       transform: translateX(4px);
     }
 
-    @include mobile-only {
-      width: 100%;
-      padding: spacing.$space-4 spacing.$space-6;
-    }
-
     &--primary {
-      background-color: colors.$color-bg-secondary;
-      color: colors.$color-text-light;
-      border: none;
+      background-color: transparent;
+      color: colors.$color-white;
+      border: 1px solid colors.$color-white-40;
 
       &:hover {
-        background-color: colors.$color-bg-secondary;
-        transform: translateY(-2px);
-        box-shadow: 0 0.5rem 1.5rem colors.$color-primary-50;
+        border-color: colors.$color-white;
+        background-color: colors.$color-white-10;
       }
 
       &:active {
-        transform: translateY(0);
+        background-color: colors.$color-white-15;
       }
     }
 
     &--secondary {
-      background-color: colors.$color-bg-secondary;
-      color: colors.$color-text-primary;
-      border: 1.5px solid colors.$color-border-medium;
+      background-color: transparent;
+      color: colors.$color-white;
+      border: 1px solid colors.$color-white-25;
 
       &:hover {
-        border-color: colors.$color-text-primary;
-        background-color: colors.$color-bg-secondary;
-        transform: translateY(-2px);
+        border-color: colors.$color-white-50;
+        background-color: colors.$color-white-05;
       }
 
       &:active {
-        transform: translateY(0);
+        background-color: colors.$color-white-10;
       }
     }
   }

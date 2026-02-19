@@ -130,7 +130,13 @@ export interface Property {
   lease_years_remaining?: number
   broadband_speed?: string
   mobile_signal_strength?: string
-  
+
+  // Additional property details
+  year_built?: number
+  condition?: string
+  land_area?: number
+  minimum_term?: string
+
   // Media
   property_media?: PropertyMedia[]
   main_image_url?: string | null  // Returned by map search API
@@ -295,6 +301,15 @@ export const FURNISHING_TYPES: { value: FurnishingType; label: string }[] = [
   { value: 'furnished', label: 'Furnished' },
   { value: 'unfurnished', label: 'Unfurnished' },
   { value: 'part_furnished', label: 'Part Furnished' },
+]
+
+export const LISTING_STATUS_OPTIONS: { value: ListingStatus; label: string; forSale: boolean; forLet: boolean }[] = [
+  { value: 'available', label: 'Available', forSale: true, forLet: true },
+  { value: 'under_offer', label: 'Under Offer', forSale: true, forLet: false },
+  { value: 'sold_stc', label: 'Sold STC', forSale: true, forLet: false },
+  { value: 'sold', label: 'Sold', forSale: true, forLet: false },
+  { value: 'let_agreed', label: 'Let Agreed', forSale: false, forLet: true },
+  { value: 'let', label: 'Let', forSale: false, forLet: true },
 ]
 
 // ========================================
