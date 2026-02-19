@@ -360,7 +360,7 @@
 .property-card__description {
   font-size: 13px;
   font-weight: typography.$font-weight-regular;
-  color: colors.$color-text-muted;
+  color: colors.$color-text-primary;
   line-height: 1.6;
   margin: 0 0 spacing.$space-6 0;
   display: -webkit-box;
@@ -403,14 +403,14 @@
 .property-card__spec-icon {
   width: 18px;
   height: 18px;
-  color: colors.$color-text-muted;
+  color: colors.$color-text-primary;
   flex-shrink: 0;
 }
 
 .property-card__spec-text {
   font-size: 0.9375rem;
   font-weight: typography.$font-weight-medium;
-  color: colors.$color-text-secondary;
+  color: colors.$color-text-primary;
   white-space: nowrap;
 }
 
